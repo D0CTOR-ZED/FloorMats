@@ -1,0 +1,25 @@
+{
+
+    "block.floormats.stone_floormat_block"  : "Stone Floor Mat",
+    "block.floormats.iron_floormat_block"   : "Iron Floor Mat",
+    "block.floormats.gold_floormat_block"   : "Gold Floor Mat",
+    "block.floormats.oak_floormat_block"    : "Oak Floor Mat",
+    "block.floormats.spruce_floormat_block" : "Spruce Floor Mat",
+    "block.floormats.birch_floormat_block"  : "Birch Floor Mat",
+    "block.floormats.jungle_floormat_block" : "Jungle Floor Mat",
+    "block.floormats.acacia_floormat_block" : "Acacia Floor Mat",
+    "block.floormats.darkoak_floormat_block": "Dark Oak Floor Mat",
+
+    "info.floormats.floormat_block"     : "Floor mats are pressure plates that act as a connected group.",
+
+    "info.floormats.trigger.everything" : "Everything triggers this type of floor mat.",
+    "info.floormats.trigger.mobs"       : "Living entities trigger this type of floor mat.",
+    "info.floormats.trigger.entities"   : "Everything triggers this type of floor mat.",
+    "info.floormats.trigger.players"    : "Only players trigger this type of floor mat.",
+
+    "_comment": "Creative Tabs",
+    "itemGroup.floormats": "Floor Mats",
+
+    "message.floormats.command.reset.feedback": "Floor Mats data reset!",
+    "message.floormats.command.reset.corrections": "corrections made."
+}

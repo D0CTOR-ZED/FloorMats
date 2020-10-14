@@ -1,0 +1,8 @@
+{
+  "parent": "floormats:block/floormats/floormat_base",
+  "textures": {
+    "top":    "floormats:block/floormats/acacia/acacia_floormatblock_connect_2a",
+    "bottom": "floormats:block/floormats/acacia/acacia_floormatblock_connect_2a_bottom",
+    "side":   "floormats:block/floormats/acacia/acacia_floormatblock_connect_0"
+  }
+}

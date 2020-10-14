@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "minecraft",
+  "ingredients": [
+    {
+      "item": "floormats:stone_floormat_item"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "minecraft:stone_pressure_plate"
+  }
+}

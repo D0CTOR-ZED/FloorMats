@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "metal_floormat",
+  "pattern": [
+    "xrx"
+  ],
+  "key": {
+    "x": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "r": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "result": {
+    "count": 4,
+    "item": "floormats:iron_floormat_item"
+  }
+}

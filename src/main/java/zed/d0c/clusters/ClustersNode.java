@@ -1,0 +1,329 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *  Class: ClustersNode
+ *      Part of the Clusters package.  Handles the connected bits.
+ *  Copyright (c) 2020 D0CTOR ZED
+ *  This code is licensed under the MIT License, available in the root folder.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+package zed.d0c.clusters;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.INBTSerializable;
+
+import javax.annotation.Nullable;
+import java.util.*;
+
+import static net.minecraft.state.properties.BlockStateProperties.POWERED;
+import static zed.d0c.clusters.Clusters.ClustersSet;
+
+/*  ************************************************************************************
+ *
+ *  Clusters Node - The data for a single cluster.
+ *
+ *  Each collection of identical clusters blocks is a single clusters node.
+ *
+ *  TO DO:
+ *
+ *  Replace hard coded POWERED with state/function from Clusters registry
+ *
+ *  Add the ability for sets of blocks to form a single cluster.  At the
+ *  moment, each cluster is a single block type.
+ *
+ *  ************************************************************************************
+ *  CLUSTER_NODE COMPOUND NBT STRUCTURE
+ *
+ *  Structure           KEY                 Data Type
+ *  ------------        ----------------    --------------------------------------------
+ *  BLOCK_TYPE          BLOCK_TYPE_KEY      String
+ *  UUID_LIST           LIST_UUID_KEY       ListNBT of CompoundNBT (UniqueIDs)
+ *  LOWER_BOUND         LOWER_BOUND_KEY     Long (NOT IMPLEMENTED)
+ *  UPPER_BOUND         UPPER_BOUND_KEY     Long (NOT IMPLEMENTED)
+ *  NODE_MAP            NODE_MAP_KEY        CompoundNBT (Key: BLOCK_POS, Value: BOOLEAN)
+ *      BLOCK_POS       N/A                 String (BlockPos.toLong.toString)
+ *      DIRECT_POWER    BLOCK_POS           Boolean (Indicates directly powered)
+ *  ************************************************************************************/
+
+// Public due to PunchCards using it in their read/writes.
+// Perhaps PunchCards should access node data through Clusters?
+public class ClustersNode implements INBTSerializable<CompoundNBT> {
+
+    private final String cnBlockType;
+    private final HashSet<UUID> cnUUID_Set = new HashSet<>();
+    private final HashMap<BlockPos, Boolean> cnNodeMap = new HashMap<>();
+
+    private static final String BLOCK_TYPE_KEY      = "cnBlockName";
+    private static final String NODE_MAP_KEY        = "cnNodeMap";
+    private static final String LIST_UUID_KEY       = "cnListUUID";
+
+    ClustersNode(String blockTypeString, HashSet<UUID> uuidSet) {
+        cnBlockType   = blockTypeString;
+        cnUUID_Set.addAll(uuidSet);
+    }
+
+    ClustersNode(Block block, BlockPos pos) {
+        BlockPos iPos = pos.toImmutable();
+        cnBlockType = Objects.requireNonNull(block.getRegistryName()).toString();
+        cnNodeMap.put(iPos,false);
+    }
+
+    public ClustersNode(CompoundNBT entry) {
+        // cnBlockType must be init here, 'cause final.  The rest is deserialized.
+        cnBlockType = entry.getString(BLOCK_TYPE_KEY);
+        deserializeNBT(entry);
+    }
+
+    @Override
+    public CompoundNBT serializeNBT() {
+        CompoundNBT nbt = new CompoundNBT();
+        synchronized (this) {
+            nbt.putString(BLOCK_TYPE_KEY, cnBlockType);
+            if (!cnUUID_Set.isEmpty()) {
+                ListNBT uuidLNBT = new ListNBT();
+                for (UUID u : cnUUID_Set) {
+                    CompoundNBT cNBT = new CompoundNBT();
+                    cNBT.putUniqueId("",u);
+                    uuidLNBT.add(cNBT);
+                }
+                nbt.put (LIST_UUID_KEY, uuidLNBT);
+            }
+            CompoundNBT nodeMapNBT = new CompoundNBT();
+            for (BlockPos key : cnNodeMap.keySet()) {
+                nodeMapNBT.putBoolean(Long.toString(key.toLong()), cnNodeMap.get(key));
+            }
+            nbt.put(NODE_MAP_KEY,nodeMapNBT);
+        }
+        return nbt;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundNBT entry) {
+        // feels like cnBlockType should be here too, but currently final.
+        final ListNBT uuidLNBT = entry.getList(LIST_UUID_KEY, Constants.NBT.TAG_COMPOUND);
+        for (int index=0; index<uuidLNBT.size(); ++index) {
+            cnUUID_Set.add(uuidLNBT.getCompound(index).getUniqueId(""));
+        }
+        CompoundNBT nodeMapNBT = entry.getCompound(NODE_MAP_KEY);
+        for (String key : nodeMapNBT.keySet()) {
+            cnNodeMap.put(BlockPos.fromLong(Long.parseLong(key)),nodeMapNBT.getBoolean(key));
+        }
+
+    }
+
+    public String getNodeBlockType() { return cnBlockType; }
+
+    boolean contains(Block block, BlockPos pos) {
+        // this is where a check for bounds might prevent searching
+        // through the keys.  Not sure if this would improve performance for larger clusters
+        // or just add a performance hit with extra checks.
+        if (Objects.requireNonNull(block.getRegistryName()).toString().equals(cnBlockType)) {
+            return cnNodeMap.containsKey(pos);
+        }
+        return false;
+    }
+
+    private void broadcastToNeighbors(World worldIn, HashSet<BlockPos> posToBroadcast) {
+        // give one chance to cancel this... not sure why this would ever happen.
+        // Don't think it needs to be checked for every single iteration.
+        BlockPos anyPos = (BlockPos) posToBroadcast.toArray()[0];
+        if (net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(worldIn, anyPos, worldIn.getBlockState(anyPos), java.util.EnumSet.allOf(Direction.class), false).isCanceled())
+            return;
+
+        for (BlockPos pos : posToBroadcast) {
+            BlockState state = worldIn.getBlockState(pos);
+            // Is there an better alternative to mass notify.... probably not.
+            // I've considered skipping horizontal notification for maps that connect to 4 other mats
+            // or on a connected side by side basis, but more checks would probably be worse than
+            // a bunch of empty calls. But it's not empty anymore, so maybe processing time checks
+            // would indicate which is better for performance.  Really only matters if someone goes
+            // crazy with these things.
+            Block block = state.getBlock();
+            worldIn.neighborChanged(pos.west(), block, pos);
+            worldIn.neighborChanged(pos.east(), block, pos);
+            worldIn.neighborChanged(pos.down(), block, pos);
+            worldIn.neighborChanged(pos.up(), block, pos);
+            worldIn.neighborChanged(pos.north(), block, pos);
+            worldIn.neighborChanged(pos.south(), block, pos);
+
+            BlockPos downPos = pos.down();
+            BlockState downState = worldIn.getBlockState(downPos);
+            Block downBlock = downState.getBlock();
+            worldIn.neighborChanged(downPos.west(), downBlock, downPos);
+            worldIn.neighborChanged(downPos.east(), downBlock, downPos);
+            worldIn.neighborChanged(downPos.down(), downBlock, downPos);
+            // prevent block under map from telling mat it changed.
+            // this is used to identify when a different source powers mat from below.
+            // That causes the mat to pulse, for useful redstone mechanics.
+            // worldIn.neighborChanged(downPos.up(), downBlock, downPos);
+            worldIn.neighborChanged(downPos.north(), downBlock, downPos);
+            worldIn.neighborChanged(downPos.south(), downBlock, downPos);
+
+        }
+    }
+
+    // returns if the node was powered as a result of this call
+    public boolean powerNode(World worldIn, BlockPos iPos, @Nullable ArrayList<PlayerEntity> playerList) {
+        // We only need to act if the node wasn't already marked as directly powered.
+        if (!cnNodeMap.get(iPos)) {
+            if ( (!cnUUID_Set.isEmpty()) && (playerList != null) ) {
+                boolean playerRegistered = false;
+                for (PlayerEntity player : playerList) {
+                    if (cnUUID_Set.contains(player.getUniqueID())) {
+                        playerRegistered = true;
+                        break;
+                    }
+                }
+                if (!playerRegistered) {
+                    return false;
+                }
+            }
+
+            /* Was getting concurrent modification issues here
+             * Now storing key set at start and moved notify loop outside of sync
+             * notification was resulting in concurrent modification, probably same thread too
+             */
+            HashSet<BlockPos> posToIterate = new HashSet<>(cnNodeMap.keySet());
+            synchronized (this) {
+                cnNodeMap.put(iPos, true);
+                for (BlockPos activatePos : posToIterate) {
+                    worldIn.setBlockState(activatePos, worldIn.getBlockState(activatePos).with(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                }
+            }
+            // custom version of notifyNeighborsOfStateChange
+            broadcastToNeighbors(worldIn,posToIterate);
+            return true;
+        }
+        return false;
+    }
+
+    void depowerNode(World worldIn) {
+        HashSet<BlockPos> posToIterate = new HashSet<>(cnNodeMap.keySet());
+        synchronized (this) {
+            for (BlockPos deactivatePos : posToIterate) {
+                BlockState oldState = worldIn.getBlockState(deactivatePos);
+                BlockState newState = oldState.with(POWERED, false);
+                worldIn.setBlockState(deactivatePos, newState, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+            }
+        }
+        broadcastToNeighbors(worldIn,posToIterate);
+    }
+
+    boolean isPowered() { return cnNodeMap.containsValue(true); }
+
+    // returns whether the node depowered so we can play the deactivate sound.
+    boolean depowerBlock(World worldIn, BlockPos pos) {
+        cnNodeMap.replace(pos, false);
+        if (isPowered()) {
+            return false;
+        } else {
+            depowerNode(worldIn);
+            return true;
+        }
+    }
+
+    void absorbOtherNode(ClustersNode otherNode) {
+        synchronized (this) {
+            cnUUID_Set.addAll(otherNode.cnUUID_Set);
+            cnNodeMap.putAll(otherNode.cnNodeMap);
+        }
+    }
+
+    public void removePos(World worldIn, BlockPos pos) {
+        Boolean wasPowered;
+        synchronized (this) {
+            wasPowered = cnNodeMap.get(pos);
+            cnNodeMap.remove(pos);
+        }
+        if (wasPowered && !isPowered()) {
+            depowerNode(worldIn);
+        }
+    }
+
+    /*
+     * reformNode is used when a block being removed from a node may cause the node to split into multiple
+     * distinct nodes.  This node will have its block entries eliminated as one or more new nodes are formed.
+     * Returns a list of newly created distinct nodes
+     */
+    public ClustersSet reformNode() {
+
+        ClustersSet returnDistinctNodes = new ClustersSet();
+        String blockType = this.getNodeBlockType();
+
+        // This loop will be processed once per contiguous cluster.
+        // What it does is it picks a block to start a new cluster,
+        // then it identifies adjacent blocks in the same cluster.
+        // It keeps adding and checking adjacent position until it
+        // has found all of them.  Anything left must be non-contiguous
+        // with it, so a new node is started and the process repeats.
+        while (cnNodeMap.size() > 0) {
+            ClustersNode newNode = new ClustersNode(blockType,cnUUID_Set);
+            HashSet<BlockPos> posToAdd = new HashSet<>();
+
+            // We just need any key from the cnNodeMap, so extract the first key
+            BlockPos anyKey = ((BlockPos) cnNodeMap.keySet().toArray()[0]);
+
+            // Don't think I need toImmutable, since key should already be immutable
+            // and the end result isn't copying the key as much as moving it to a new home
+            // not sure and this is an uncommon event.
+
+            posToAdd.add(anyKey.toImmutable());
+
+            while (posToAdd.size() > 0) {
+                BlockPos nextPos = (BlockPos) posToAdd.toArray()[0];
+                posToAdd.remove(nextPos);
+
+                // move data to newNode, removing it from this.cnNodeMap
+                newNode.cnNodeMap.put(nextPos.toImmutable(),this.cnNodeMap.remove(nextPos));
+                for (Direction direction : Direction.Plane.HORIZONTAL) {
+                    BlockPos adjacentPos = nextPos.offset(direction);
+                    if (this.cnNodeMap.containsKey(adjacentPos)) {
+                        posToAdd.add(adjacentPos.toImmutable());
+                    }
+                }
+            }
+            returnDistinctNodes.add(newNode);
+        }
+        return returnDistinctNodes;
+    }
+
+    public void powerAsNeeded(World worldIn) {
+        if (isPowered()) {
+            final HashSet<BlockPos> poweredBPSet = new HashSet<>();
+            for (BlockPos pos : cnNodeMap.keySet()) {
+                BlockState state = worldIn.getBlockState(pos);
+                if (!state.get(POWERED)) {
+                    worldIn.setBlockState(pos, state.with(POWERED,true), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                    poweredBPSet.add(pos);
+                }
+            }
+            if (!poweredBPSet.isEmpty()) {
+                broadcastToNeighbors(worldIn,poweredBPSet);
+            }
+        }
+    }
+
+    public void addUniqueID(UUID uniqueID) {
+        cnUUID_Set.add(uniqueID);
+    }
+
+    public int cmdResetNode(ServerWorld serverWorld) {
+        HashSet<BlockPos> failedPosSet = new HashSet<>();
+        for (BlockPos posToCheck : cnNodeMap.keySet()) {
+            if (!Objects.requireNonNull(serverWorld.getBlockState(posToCheck).getBlock().getRegistryName()).toString().equals(cnBlockType)) {
+                failedPosSet.add(posToCheck);
+            }
+        }
+        for (BlockPos posToCull : failedPosSet) {
+            cnNodeMap.remove(posToCull);
+        }
+        return failedPosSet.size();
+    }
+
+}
