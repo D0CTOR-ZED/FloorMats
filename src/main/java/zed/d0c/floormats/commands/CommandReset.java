@@ -19,7 +19,7 @@ public class CommandReset implements Command<CommandSource> {
     // Parameter 'dispatcher' is never used
     public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher) {
         return Commands.literal("reset")
-                .requires(cs -> cs.hasPermissionLevel(1))
+                .requires(cs -> cs.hasPermissionLevel(0))
                 .executes(CMD);
     }
 

@@ -10,12 +10,12 @@
     "block.floormats.acacia_floormat_block" : "Acacia Floor Mat",
     "block.floormats.darkoak_floormat_block": "Dark Oak Floor Mat",
 
-    "info.floormats.floormat_block"     : "Floor mats are pressure plates that act as a connected group.",
+    "info.floormats.floormat_block"     : "Multiblock pressure plate.",
 
-    "info.floormats.trigger.everything" : "Everything triggers this type of floor mat.",
-    "info.floormats.trigger.mobs"       : "Living entities trigger this type of floor mat.",
-    "info.floormats.trigger.entities"   : "Everything triggers this type of floor mat.",
-    "info.floormats.trigger.players"    : "Only players trigger this type of floor mat.",
+    "info.floormats.trigger.everything" : "Triggered by everything.",
+    "info.floormats.trigger.mobs"       : "Triggered by living entities.",
+    "info.floormats.trigger.entities"   : "Triggered by entities.",
+    "info.floormats.trigger.players"    : "Triggered by players.",
 
     "_comment": "Creative Tabs",
     "itemGroup.floormats": "Floor Mats",

@@ -189,11 +189,18 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
              * Now storing key set at start and moved notify loop outside of sync
              * notification was resulting in concurrent modification, probably same thread too
              */
-            HashSet<BlockPos> posToIterate = new HashSet<>(cnNodeMap.keySet());
+            HashSet<BlockPos> posToIterate   = new HashSet<>(cnNodeMap.keySet());
             synchronized (this) {
                 cnNodeMap.put(iPos, true);
                 for (BlockPos activatePos : posToIterate) {
-                    worldIn.setBlockState(activatePos, worldIn.getBlockState(activatePos).with(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                    BlockState state = worldIn.getBlockState(activatePos);
+                    // to do: refactor cnBlockType to be the actual Block
+                    // else added to patch issue #1
+                    if (Objects.requireNonNull(state.getBlock().getRegistryName()).toString().equals(cnBlockType)) {
+                        worldIn.setBlockState(activatePos, state.with(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                    } else {
+                        cnNodeMap.remove(activatePos);
+                    }
                 }
             }
             // custom version of notifyNeighborsOfStateChange
@@ -208,8 +215,11 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
         synchronized (this) {
             for (BlockPos deactivatePos : posToIterate) {
                 BlockState oldState = worldIn.getBlockState(deactivatePos);
-                BlockState newState = oldState.with(POWERED, false);
-                worldIn.setBlockState(deactivatePos, newState, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                if (Objects.requireNonNull(oldState.getBlock().getRegistryName()).toString().equals(cnBlockType)) {
+                    worldIn.setBlockState(deactivatePos, oldState.with(POWERED, false), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                } else {
+                    cnNodeMap.remove(deactivatePos);
+                }
             }
         }
         broadcastToNeighbors(worldIn,posToIterate);
