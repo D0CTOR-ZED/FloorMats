@@ -12,11 +12,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -55,7 +57,7 @@ import static zed.d0c.clusters.Clusters.ClustersSet;
 // Perhaps PunchCards should access node data through Clusters?
 public class ClustersNode implements INBTSerializable<CompoundNBT> {
 
-    private final String cnBlockType;
+    private final Block cnBlock;
     private final HashSet<UUID> cnUUID_Set = new HashSet<>();
     private final HashMap<BlockPos, Boolean> cnNodeMap = new HashMap<>();
 
@@ -63,20 +65,20 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     private static final String NODE_MAP_KEY        = "cnNodeMap";
     private static final String LIST_UUID_KEY       = "cnListUUID";
 
-    ClustersNode(String blockTypeString, HashSet<UUID> uuidSet) {
-        cnBlockType   = blockTypeString;
+    ClustersNode(Block blockType, HashSet<UUID> uuidSet) {
+        cnBlock       = blockType;
         cnUUID_Set.addAll(uuidSet);
     }
 
     ClustersNode(Block block, BlockPos pos) {
         BlockPos iPos = pos.toImmutable();
-        cnBlockType = Objects.requireNonNull(block.getRegistryName()).toString();
+        cnBlock = block;
         cnNodeMap.put(iPos,false);
     }
 
     public ClustersNode(CompoundNBT entry) {
-        // cnBlockType must be init here, 'cause final.  The rest is deserialized.
-        cnBlockType = entry.getString(BLOCK_TYPE_KEY);
+        // cnBlock must be init here, 'cause final.  The rest is deserialized.
+        cnBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(entry.getString(BLOCK_TYPE_KEY)));
         deserializeNBT(entry);
     }
 
@@ -84,7 +86,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     public CompoundNBT serializeNBT() {
         CompoundNBT nbt = new CompoundNBT();
         synchronized (this) {
-            nbt.putString(BLOCK_TYPE_KEY, cnBlockType);
+            nbt.putString(BLOCK_TYPE_KEY, Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(cnBlock)).toString());
             if (!cnUUID_Set.isEmpty()) {
                 ListNBT uuidLNBT = new ListNBT();
                 for (UUID u : cnUUID_Set) {
@@ -105,7 +107,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
 
     @Override
     public void deserializeNBT(CompoundNBT entry) {
-        // feels like cnBlockType should be here too, but currently final.
+        // feels like cnBlock should be here too, but currently final.
         final ListNBT uuidLNBT = entry.getList(LIST_UUID_KEY, Constants.NBT.TAG_COMPOUND);
         for (int index=0; index<uuidLNBT.size(); ++index) {
             cnUUID_Set.add(uuidLNBT.getCompound(index).getUniqueId(""));
@@ -117,13 +119,13 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
 
     }
 
-    public String getNodeBlockType() { return cnBlockType; }
+    public Block getNodeBlockType() { return cnBlock; }
 
     boolean contains(Block block, BlockPos pos) {
         // this is where a check for bounds might prevent searching
         // through the keys.  Not sure if this would improve performance for larger clusters
         // or just add a performance hit with extra checks.
-        if (Objects.requireNonNull(block.getRegistryName()).toString().equals(cnBlockType)) {
+        if ( block == cnBlock ) {
             return cnNodeMap.containsKey(pos);
         }
         return false;
@@ -194,9 +196,8 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
                 cnNodeMap.put(iPos, true);
                 for (BlockPos activatePos : posToIterate) {
                     BlockState state = worldIn.getBlockState(activatePos);
-                    // to do: refactor cnBlockType to be the actual Block
                     // else added to patch issue #1
-                    if (Objects.requireNonNull(state.getBlock().getRegistryName()).toString().equals(cnBlockType)) {
+                    if ( state.getBlock() == cnBlock ) {
                         worldIn.setBlockState(activatePos, state.with(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
                     } else {
                         cnNodeMap.remove(activatePos);
@@ -215,7 +216,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
         synchronized (this) {
             for (BlockPos deactivatePos : posToIterate) {
                 BlockState oldState = worldIn.getBlockState(deactivatePos);
-                if (Objects.requireNonNull(oldState.getBlock().getRegistryName()).toString().equals(cnBlockType)) {
+                if ( oldState.getBlock() == cnBlock ) {
                     worldIn.setBlockState(deactivatePos, oldState.with(POWERED, false), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
                 } else {
                     cnNodeMap.remove(deactivatePos);
@@ -264,7 +265,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     public ClustersSet reformNode() {
 
         ClustersSet returnDistinctNodes = new ClustersSet();
-        String blockType = this.getNodeBlockType();
+        Block blockType = this.getNodeBlockType();
 
         // This loop will be processed once per contiguous cluster.
         // What it does is it picks a block to start a new cluster,
@@ -326,7 +327,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     public int cmdResetNode(ServerWorld serverWorld) {
         HashSet<BlockPos> failedPosSet = new HashSet<>();
         for (BlockPos posToCheck : cnNodeMap.keySet()) {
-            if (!Objects.requireNonNull(serverWorld.getBlockState(posToCheck).getBlock().getRegistryName()).toString().equals(cnBlockType)) {
+            if ( serverWorld.getBlockState(posToCheck).getBlock() != cnBlock ) {
                 failedPosSet.add(posToCheck);
             }
         }
