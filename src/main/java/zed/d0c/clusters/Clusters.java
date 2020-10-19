@@ -119,6 +119,8 @@ public class Clusters {
         return newNode;
     }
 
+    // needs to return true if iPos wasn't already marked as directly powered (regardless of whether mat was previously powered
+    // this will determine if the block needs to tick.  It will tick until not directly powered.
     public boolean applyDirectPower(World worldIn, BlockPos iPos, @Nullable ArrayList<PlayerEntity> playerList) {
         ClustersNode node = getNode(worldIn,worldIn.getBlockState(iPos),iPos);
         boolean directPowerApplied = node.powerNode(worldIn,iPos, playerList);

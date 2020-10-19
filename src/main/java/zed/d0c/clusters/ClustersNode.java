@@ -141,7 +141,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
         for (BlockPos pos : posToBroadcast) {
             BlockState state = worldIn.getBlockState(pos);
             // Is there an better alternative to mass notify.... probably not.
-            // I've considered skipping horizontal notification for maps that connect to 4 other mats
+            // I've considered skipping horizontal notification for mats that connect to 4 other mats
             // or on a connected side by side basis, but more checks would probably be worse than
             // a bunch of empty calls. But it's not empty anymore, so maybe processing time checks
             // would indicate which is better for performance.  Really only matters if someone goes
@@ -170,7 +170,8 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
         }
     }
 
-    // returns if the node was powered as a result of this call
+    // returns whether this call caused the iPos to be marked as an actively powered block
+    // this will result in the block ticking until it is no longer directly powered
     public boolean powerNode(World worldIn, BlockPos iPos, @Nullable ArrayList<PlayerEntity> playerList) {
         // We only need to act if the node wasn't already marked as directly powered.
         if (!cnNodeMap.get(iPos)) {
@@ -193,14 +194,17 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
              */
             HashSet<BlockPos> posToIterate   = new HashSet<>(cnNodeMap.keySet());
             synchronized (this) {
+                boolean alreadyPowered = isPowered();
                 cnNodeMap.put(iPos, true);
-                for (BlockPos activatePos : posToIterate) {
-                    BlockState state = worldIn.getBlockState(activatePos);
-                    // else added to patch issue #1
-                    if ( state.getBlock() == cnBlock ) {
-                        worldIn.setBlockState(activatePos, state.with(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
-                    } else {
-                        cnNodeMap.remove(activatePos);
+                if (!alreadyPowered) {
+                    for (BlockPos activatePos : posToIterate) {
+                        BlockState state = worldIn.getBlockState(activatePos);
+                        // else added to patch issue #1
+                        if (state.getBlock() == cnBlock) {
+                            worldIn.setBlockState(activatePos, state.with(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                        } else {
+                            cnNodeMap.remove(activatePos);
+                        }
                     }
                 }
             }
