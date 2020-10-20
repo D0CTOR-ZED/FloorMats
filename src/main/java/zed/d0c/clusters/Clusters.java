@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
+import static net.minecraft.block.SixWayBlock.FACING_TO_PROPERTY_MAP;
+
 /*  **************************************************************************
  *
  *  Clusters - Multiblock of identical blocks
@@ -141,17 +143,19 @@ public class Clusters {
         ClustersNode newNode = getNode(worldIn,state,iPos);
 
         for (Direction direction : Direction.Plane.HORIZONTAL) {
-            BlockPos neighborPos = iPos.offset(direction);
-            // the check for same block type; could at some point be it's own method to allow multi-type clusters
-            // if found, may need to merge the nodes
-            if ( worldIn.getBlockState(neighborPos).getBlock() == block ) {
-                ClustersNode adjacentNode = getNode(worldIn,state,neighborPos);
-                // It may have already merged with the node if the adjacent node touches multiple sides.
-                if (!newNode.equals(adjacentNode)) {
-                    // To be safe, I try to sync any time I would like a series of changes to be atomic.
-                    synchronized (Clusters.getClustersRegistry()) {
-                        newNode.absorbOtherNode(adjacentNode);
-                        removeNode(worldIn, adjacentNode);
+            if (state.get(FACING_TO_PROPERTY_MAP.get(direction))) {
+                BlockPos neighborPos = iPos.offset(direction);
+                // the check for same block type; could at some point be it's own method to allow multi-type clusters
+                // if found, may need to merge the nodes
+                if (worldIn.getBlockState(neighborPos).getBlock() == block) {
+                    ClustersNode adjacentNode = getNode(worldIn, state, neighborPos);
+                    // It may have already merged with the node if the adjacent node touches multiple sides.
+                    if (!newNode.equals(adjacentNode)) {
+                        // To be safe, I try to sync any time I would like a series of changes to be atomic.
+                        synchronized (Clusters.getClustersRegistry()) {
+                            newNode.absorbOtherNode(adjacentNode);
+                            removeNode(worldIn, adjacentNode);
+                        }
                     }
                 }
             }
@@ -165,16 +169,20 @@ public class Clusters {
     }
 
     public void removeFromClusters(World worldIn, BlockPos iPos, BlockState state) {
-        final Block block = state.getBlock();
+        // final Block block = state.getBlock();
         final boolean wasPowered = state.get(BlockStateProperties.POWERED);
         final ClustersNode thisNode = getNode(worldIn,state,iPos);
 
         int neighborCount = 0;
         for (Direction direction : Direction.Plane.HORIZONTAL) {
-            BlockPos neighborPos = iPos.offset(direction);
+            // BlockPos neighborPos = iPos.offset(direction);
             // the check for same block type should at some point be it's own method to allow multi-type clusters
-            if ( worldIn.getBlockState(neighborPos).getBlock() == block ) {
+            // if ( worldIn.getBlockState(neighborPos).getBlock() == block ) {
+            //     ++neighborCount;
+            // }
+            if (state.get(FACING_TO_PROPERTY_MAP.get(direction))) {
                 ++neighborCount;
+
             }
         }
 
@@ -192,11 +200,9 @@ public class Clusters {
                 default:    // more than one neighbor.  The cluster may split into multiple parts
                             // if node was powered, each part needs to reevaluate power.
                     thisNode.removePos(worldIn, iPos);
+                    ClustersSet setOfNodes = thisNode.reformNode(worldIn);
                     removeNode(worldIn, thisNode);
-
-                    ClustersSet setOfNodes = thisNode.reformNode();
                     addNodeSet(worldIn, setOfNodes);
-                    removeNode(worldIn, thisNode);
                     if (wasPowered) {
                         for (ClustersNode nodeForPowerCheck : setOfNodes) {
                             if (!nodeForPowerCheck.isPowered()) {
@@ -204,6 +210,24 @@ public class Clusters {
                             }
                         }
                     }
+            }
+        }
+        PunchCards.setDirty();
+    }
+
+    public void alterClusters(World worldIn, BlockPos iPos, BlockState stateIn) {
+        ClustersNode node = getNode(worldIn,stateIn,iPos);
+        boolean wasPowered = node.isPowered();
+        synchronized (Clusters.getClustersRegistry()) {
+            ClustersSet setOfNodes = node.reformNode(worldIn);
+            removeNode(worldIn, node);
+            addNodeSet(worldIn, setOfNodes);
+            if (wasPowered) { // doesn't need sync, but does need setOfNodes
+                for (ClustersNode nodeForPowerCheck : setOfNodes) {
+                    if (!nodeForPowerCheck.isPowered()) {
+                        nodeForPowerCheck.depowerNode(worldIn);
+                    }
+                }
             }
         }
         PunchCards.setDirty();

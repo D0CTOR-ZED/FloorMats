@@ -23,6 +23,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static net.minecraft.block.SixWayBlock.FACING_TO_PROPERTY_MAP;
 import static net.minecraft.state.properties.BlockStateProperties.POWERED;
 import static zed.d0c.clusters.Clusters.ClustersSet;
 
@@ -266,7 +267,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
      * distinct nodes.  This node will have its block entries eliminated as one or more new nodes are formed.
      * Returns a list of newly created distinct nodes
      */
-    public ClustersSet reformNode() {
+    public ClustersSet reformNode(World worldIn) {
 
         ClustersSet returnDistinctNodes = new ClustersSet();
         Block blockType = this.getNodeBlockType();
@@ -296,10 +297,13 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
 
                 // move data to newNode, removing it from this.cnNodeMap
                 newNode.cnNodeMap.put(nextPos.toImmutable(),this.cnNodeMap.remove(nextPos));
+                BlockState state = worldIn.getBlockState(nextPos);
                 for (Direction direction : Direction.Plane.HORIZONTAL) {
-                    BlockPos adjacentPos = nextPos.offset(direction);
-                    if (this.cnNodeMap.containsKey(adjacentPos)) {
-                        posToAdd.add(adjacentPos.toImmutable());
+                    if (state.get(FACING_TO_PROPERTY_MAP.get(direction))) {
+                        BlockPos adjacentPos = nextPos.offset(direction);
+                        if (this.cnNodeMap.containsKey(adjacentPos)) {
+                            posToAdd.add(adjacentPos.toImmutable());
+                        }
                     }
                 }
             }

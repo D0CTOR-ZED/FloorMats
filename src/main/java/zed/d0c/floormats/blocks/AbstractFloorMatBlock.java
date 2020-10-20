@@ -341,13 +341,9 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
         }
     }
 
-
     // Right-click editing of floor mat block connections
     // First block activated stores a block position and item stack.
     // Second activation with the same item stack attempts to alter the connection between the first and second position.
-//    private static HashMap<PlayerEntity,BlockPos> toolUsedPosition;
-//    private static HashMap<PlayerEntity,ItemStack> toolUsedStack;
-
     @Override
     @Nonnull
     @SuppressWarnings("deprecation")
@@ -370,10 +366,16 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
                         worldIn.markBlockRangeForRenderUpdate(pos, stateIn, newState);
                         toolUsedPosition.remove(player);
                         toolUsedStack.remove(player);
+                        if (newState.get(directionProperty)) {
+                            // made a connection
+                            FloorMatClusters.addToClusters(worldIn, pos, newState);
+                        } else {
+                            // removed a connection
+                            FloorMatClusters.alterClusters(worldIn, pos, newState);
+                        }
                         return ActionResultType.SUCCESS;
                     }
                 }
-
             }
             // make note of the position and tool used to select a block
             toolUsedPosition.put(player,pos);
