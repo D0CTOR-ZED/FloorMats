@@ -215,6 +215,10 @@ public class Clusters {
         getNode(worldIn, state, pos).addUniqueID(uniqueID);
     }
 
+    public boolean canAlter(World worldIn, BlockPos pos, BlockState state, UUID uniqueID) {
+        return getNode(worldIn, state, pos).canAccess(uniqueID);
+    }
+
     public static int cmdReset(ServerWorld serverWorld) {
         int correctionCount = 0;
         for (DimensionType dim : CLUSTERS_REGISTRY.keySet() ) {

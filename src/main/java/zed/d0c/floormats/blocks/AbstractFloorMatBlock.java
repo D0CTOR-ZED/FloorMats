@@ -26,11 +26,10 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.ITextComponent;
@@ -41,15 +40,16 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 import zed.d0c.clusters.Clusters;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
+
+import static net.minecraft.block.SixWayBlock.FACING_TO_PROPERTY_MAP;
+import static net.minecraft.util.Hand.MAIN_HAND;
 
 @ParametersAreNonnullByDefault
 public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock implements IWaterLoggable {
@@ -61,6 +61,9 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
 
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+
+    private static final HashMap<PlayerEntity,BlockPos> toolUsedPosition = new HashMap<>();
+    private static final HashMap<PlayerEntity,ItemStack> toolUsedStack = new HashMap<>();
 
     protected AbstractFloorMatBlock(AbstractFloorMatBlock.Sensitivity sensitivityIn, Block.Properties properties) {
         super(properties);
@@ -280,26 +283,10 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
         if (stateIn.get(WATERLOGGED)) {
             worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
         }
-        // There is probably a better way to turn the direction into the BlockState property.
-        // .... and I've seen the six-way block.  Not sure that would be an improvement.
-        BooleanProperty stateDirection;
-        switch (facing) {
-            case NORTH:
-                stateDirection = BlockStateProperties.NORTH;
-                break;
-            case EAST:
-                stateDirection = BlockStateProperties.EAST;
-                break;
-            case SOUTH:
-                stateDirection = BlockStateProperties.SOUTH;
-                break;
-            case WEST:
-                stateDirection = BlockStateProperties.WEST;
-                break;
-            default:
-                return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        if (!facing.getAxis().isHorizontal()) {
+            return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
         }
-        return stateIn.with(stateDirection, canConnect(facingState));
+        return stateIn.with(FACING_TO_PROPERTY_MAP.get(facing),(facingState.getBlock() instanceof AbstractFloorMatBlock) && facingState.get(FACING_TO_PROPERTY_MAP.get(facing.getOpposite())));
     }
 
     public enum Sensitivity {
@@ -353,4 +340,46 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
             }
         }
     }
+
+
+    // Right-click editing of floor mat block connections
+    // First block activated stores a block position and item stack.
+    // Second activation with the same item stack attempts to alter the connection between the first and second position.
+//    private static HashMap<PlayerEntity,BlockPos> toolUsedPosition;
+//    private static HashMap<PlayerEntity,ItemStack> toolUsedStack;
+
+    @Override
+    @Nonnull
+    @SuppressWarnings("deprecation")
+    public ActionResultType onBlockActivated(BlockState stateIn, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+        if ( (!worldIn.isRemote) && FloorMatClusters.canAlter(worldIn, pos, stateIn, player.getUniqueID()) ) {
+            ItemStack itemInHand = (hand == MAIN_HAND) ? player.inventory.getCurrentItem() : player.inventory.offHandInventory.get(0);
+            if ((toolUsedPosition.containsKey(player)) && (toolUsedStack.get(player).equals(itemInHand))) {
+                BlockPos firstPos = toolUsedPosition.get(player);
+                // player selected a block and is using the same item to select a second block
+                for (Direction direction : Direction.Plane.HORIZONTAL) {
+                    BooleanProperty directionProperty = FACING_TO_PROPERTY_MAP.get(direction);
+                    if ( (pos.offset(direction).equals(firstPos)) && (worldIn.getBlockState(firstPos).getBlock() == stateIn.getBlock()) ) {
+                        // the two positions are adjacent and the same type of block
+                        BlockState newState = stateIn.cycle(directionProperty);
+                        BlockState oldFirstBS = worldIn.getBlockState(firstPos);
+                        BlockState newFirstBS = oldFirstBS.cycle(FACING_TO_PROPERTY_MAP.get(direction.getOpposite()));
+                        worldIn.setBlockState(firstPos, newFirstBS, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                        worldIn.markBlockRangeForRenderUpdate(pos, oldFirstBS, newFirstBS);
+                        worldIn.setBlockState(pos, newState, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                        worldIn.markBlockRangeForRenderUpdate(pos, stateIn, newState);
+                        toolUsedPosition.remove(player);
+                        toolUsedStack.remove(player);
+                        return ActionResultType.SUCCESS;
+                    }
+                }
+
+            }
+            // make note of the position and tool used to select a block
+            toolUsedPosition.put(player,pos);
+            toolUsedStack.put(player,itemInHand);
+        }
+        return ActionResultType.SUCCESS;
+    }
+
 }

@@ -328,6 +328,10 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
         cnUUID_Set.add(uniqueID);
     }
 
+    public boolean canAccess(UUID uniqueID) {
+        return ( cnUUID_Set.isEmpty() || cnUUID_Set.contains(uniqueID) );
+    }
+
     public int cmdResetNode(ServerWorld serverWorld) {
         HashSet<BlockPos> failedPosSet = new HashSet<>();
         for (BlockPos posToCheck : cnNodeMap.keySet()) {
