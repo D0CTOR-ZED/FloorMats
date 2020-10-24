@@ -3,6 +3,8 @@ package zed.d0c.floormats.setup;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -14,11 +16,19 @@ public class Registration {
 
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, FloorMats.MODID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, FloorMats.MODID);
+    private static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, FloorMats.MODID);
 
     public static void init() {
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        SOUNDS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
+
+    public static final RegistryObject<SoundEvent> FLOORMATS_MARKED = SOUNDS.register("floormats.marked", () -> new SoundEvent(new ResourceLocation(FloorMats.MODID,"floormats.marked")));
+    public static final RegistryObject<SoundEvent> FLOORMATS_LINKED = SOUNDS.register("floormats.linked", () -> new SoundEvent(new ResourceLocation(FloorMats.MODID,"floormats.linked")));
+    public static final RegistryObject<SoundEvent> FLOORMATS_UNLINKED = SOUNDS.register("floormats.unlinked", () -> new SoundEvent(new ResourceLocation(FloorMats.MODID,"floormats.unlinked")));
+    public static final RegistryObject<SoundEvent> FLOORMATS_DENIED = SOUNDS.register("floormats.denied", () -> new SoundEvent(new ResourceLocation(FloorMats.MODID,"floormats.denied")));
+    public static final RegistryObject<SoundEvent> FLOORMATS_WRENCHED = SOUNDS.register("floormats.wrenched", () -> new SoundEvent(new ResourceLocation(FloorMats.MODID,"floormats.wrenched")));
 
     public static final RegistryObject<Oak_FloorMat_Block> OAK_FLOORMAT_BLOCK = BLOCKS.register("oak_floormat_block", Oak_FloorMat_Block::new);
     public static final RegistryObject<Item> OAK_FLOORMAT_ITEM = ITEMS.register("oak_floormat_item", () -> new BlockItem(OAK_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));

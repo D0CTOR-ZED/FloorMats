@@ -12,7 +12,10 @@ public class ModCommands {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         LiteralCommandNode<CommandSource> cmd = dispatcher.register(
                 Commands.literal(FloorMats.MODID)
-                        .then(CommandReset.register(dispatcher))
+                        .executes(Command_None.register(dispatcher).getCommand())
+                        .then(Command_Help_Topic.register(dispatcher))
+                        .then(Command_Reset.register(dispatcher))
+                        .then(Command_Tools.register(dispatcher))
         );
 
         // Don't see any reason to alias the command, /floormats is fine.

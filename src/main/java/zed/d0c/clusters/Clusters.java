@@ -140,7 +140,7 @@ public class Clusters {
     public void addToClusters(World worldIn, BlockPos pos, BlockState state) {
         final BlockPos iPos = pos.toImmutable();
         final Block block = state.getBlock();
-        ClustersNode newNode = getNode(worldIn,state,iPos);
+        ClustersNode node = getNode(worldIn,state,iPos);
 
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             if (state.get(FACING_TO_PROPERTY_MAP.get(direction))) {
@@ -150,10 +150,10 @@ public class Clusters {
                 if (worldIn.getBlockState(neighborPos).getBlock() == block) {
                     ClustersNode adjacentNode = getNode(worldIn, state, neighborPos);
                     // It may have already merged with the node if the adjacent node touches multiple sides.
-                    if (!newNode.equals(adjacentNode)) {
+                    if (!node.equals(adjacentNode)) {
                         // To be safe, I try to sync any time I would like a series of changes to be atomic.
                         synchronized (Clusters.getClustersRegistry()) {
-                            newNode.absorbOtherNode(adjacentNode);
+                            node.absorbOtherNode(adjacentNode);
                             removeNode(worldIn, adjacentNode);
                         }
                     }
@@ -163,7 +163,7 @@ public class Clusters {
         // new block may have been added and existing nodes may have merged.
         // some of the blocks may therefore not be powered, even though the node is considered powered
         // they need to power, not get marked as directly powered, and update their neighbors as appropriate.
-        newNode.powerAsNeeded(worldIn);
+        node.powerAsNeeded(worldIn);
 
         PunchCards.setDirty();
     }
@@ -189,6 +189,7 @@ public class Clusters {
         synchronized (Clusters.getClustersRegistry()) {
             switch (neighborCount) {
                 case 0:    // without neighbors, this removes the node.
+                    thisNode.removeLink(worldIn,wasPowered);
                     removeNode(worldIn, thisNode);
                     break;
                 case 1:    // there is one neighbor... the node survives minus one block.
@@ -250,8 +251,32 @@ public class Clusters {
                 correctionCount += node.cmdResetNode(serverWorld);
             }
         }
+        PunchCards.setDirty();
         return correctionCount;
     }
 
+    public boolean linkClusters(World worldIn, BlockPos iPos, BlockState state, BlockPos linkPos, BlockState linkState) {
+        ClustersNode node = getNode(worldIn,state,iPos);
+        ClustersNode linkNode = getNode(worldIn,linkState,linkPos);
+        if (node.equals(linkNode)) {
+            node.removeLink(worldIn,node.isPowered());
+            PunchCards.setDirty();
+            return false;
+        }
+        boolean powered = node.isPowered();
+        boolean linkPowered = linkNode.isPowered();
+        if (powered && !linkPowered) {
+            linkNode.powerNode(worldIn, null, null);
+        } else if (linkPowered && !powered) {
+            node.powerNode(worldIn, null, null);
+        }
+        node.linkTo(linkNode);
+        PunchCards.setDirty();
+        return true;
+    }
+
+    public boolean hasDirectPower(BlockState state, World worldIn, BlockPos pos) {
+        return getNode(worldIn,state,pos).hasDirectPowerMarked(pos);
+    }
 
 }

@@ -19,6 +19,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.registries.ForgeRegistries;
+import zed.d0c.floormats.blocks.AbstractFloorMatBlock;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -46,12 +47,15 @@ import static zed.d0c.clusters.Clusters.ClustersSet;
  *  Structure           KEY                 Data Type
  *  ------------        ----------------    --------------------------------------------
  *  BLOCK_TYPE          BLOCK_TYPE_KEY      String
+ *  ID                  ID_KEY              UUID
+ *  LINK                LINK_KEY            UUID
+ *  LINK_BACK           LINK_BACK_KEY       UUID
  *  UUID_LIST           LIST_UUID_KEY       ListNBT of CompoundNBT (UniqueIDs)
  *  LOWER_BOUND         LOWER_BOUND_KEY     Long (NOT IMPLEMENTED)
  *  UPPER_BOUND         UPPER_BOUND_KEY     Long (NOT IMPLEMENTED)
  *  NODE_MAP            NODE_MAP_KEY        CompoundNBT (Key: BLOCK_POS, Value: BOOLEAN)
  *      BLOCK_POS       N/A                 String (BlockPos.toLong.toString)
- *      DIRECT_POWER    BLOCK_POS           Boolean (Indicates directly powered)
+ *      DIRECT_POWER    BLOCK_POS           boolean (Indicates directly powered)
  *  ************************************************************************************/
 
 // Public due to PunchCards using it in their read/writes.
@@ -61,10 +65,18 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     private final Block cnBlock;
     private final HashSet<UUID> cnUUID_Set = new HashSet<>();
     private final HashMap<BlockPos, Boolean> cnNodeMap = new HashMap<>();
+    private UUID cnID;
+    private UUID cnLink;
+    private UUID cnLinkBack;
+
+    private static final HashMap<UUID, ClustersNode> idRegistry = new HashMap<>();
 
     private static final String BLOCK_TYPE_KEY      = "cnBlockName";
     private static final String NODE_MAP_KEY        = "cnNodeMap";
-    private static final String LIST_UUID_KEY       = "cnListUUID";
+    private static final String LIST_UUID_KEY       = "cnListUUID"; // player list
+    private static final String ID_KEY              = "cnID"; // only assigned when needed
+    private static final String LINK_KEY            = "cnLink";
+    private static final String LINK_BACK_KEY       = "cnLinkBack";
 
     ClustersNode(Block blockType, HashSet<UUID> uuidSet) {
         cnBlock       = blockType;
@@ -88,6 +100,13 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
         CompoundNBT nbt = new CompoundNBT();
         synchronized (this) {
             nbt.putString(BLOCK_TYPE_KEY, Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(cnBlock)).toString());
+            if (cnID != null) {
+                nbt.putUniqueId(ID_KEY, cnID);
+            }
+            if (cnLink != null) {
+                nbt.putUniqueId(LINK_KEY, cnLink);
+                nbt.putUniqueId(LINK_BACK_KEY, cnLinkBack);
+            }
             if (!cnUUID_Set.isEmpty()) {
                 ListNBT uuidLNBT = new ListNBT();
                 for (UUID u : cnUUID_Set) {
@@ -108,7 +127,14 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
 
     @Override
     public void deserializeNBT(CompoundNBT entry) {
-        // feels like cnBlock should be here too, but currently final.
+        if (entry.hasUniqueId(ID_KEY)) {
+            cnID = entry.getUniqueId(ID_KEY);
+            idRegistry.put(cnID,this);
+        }
+        if (entry.hasUniqueId(LINK_KEY)) {
+            cnLink = entry.getUniqueId(LINK_KEY);
+            cnLinkBack = entry.getUniqueId(LINK_BACK_KEY);
+        }
         final ListNBT uuidLNBT = entry.getList(LIST_UUID_KEY, Constants.NBT.TAG_COMPOUND);
         for (int index=0; index<uuidLNBT.size(); ++index) {
             cnUUID_Set.add(uuidLNBT.getCompound(index).getUniqueId(""));
@@ -121,6 +147,13 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     }
 
     public Block getNodeBlockType() { return cnBlock; }
+
+    private UUID getID() {
+        if (cnID != null) { return cnID; }
+        cnID = UUID.randomUUID();
+        idRegistry.put(cnID,this);
+        return cnID;
+    }
 
     boolean contains(Block block, BlockPos pos) {
         // this is where a check for bounds might prevent searching
@@ -173,10 +206,10 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
 
     // returns whether this call caused the iPos to be marked as an actively powered block
     // this will result in the block ticking until it is no longer directly powered
-    public boolean powerNode(World worldIn, BlockPos iPos, @Nullable ArrayList<PlayerEntity> playerList) {
+    public boolean powerNode(World worldIn, @Nullable BlockPos iPos, @Nullable ArrayList<PlayerEntity> playerList) {
         // We only need to act if the node wasn't already marked as directly powered.
-        if (!cnNodeMap.get(iPos)) {
-            if ( (!cnUUID_Set.isEmpty()) && (playerList != null) ) {
+        if ( (iPos == null) || (!cnNodeMap.get(iPos)) ) {
+            if ( (playerList != null) && (!cnUUID_Set.isEmpty()) ) {
                 boolean playerRegistered = false;
                 for (PlayerEntity player : playerList) {
                     if (cnUUID_Set.contains(player.getUniqueID())) {
@@ -193,45 +226,73 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
              * Now storing key set at start and moved notify loop outside of sync
              * notification was resulting in concurrent modification, probably same thread too
              */
-            HashSet<BlockPos> posToIterate   = new HashSet<>(cnNodeMap.keySet());
+            HashSet<BlockPos> posToUpdate = new HashSet<>(cnNodeMap.keySet());
             synchronized (this) {
                 boolean alreadyPowered = isPowered();
-                cnNodeMap.put(iPos, true);
+                if (iPos != null) {
+                    cnNodeMap.put(iPos, true);
+                }
                 if (!alreadyPowered) {
-                    for (BlockPos activatePos : posToIterate) {
-                        BlockState state = worldIn.getBlockState(activatePos);
-                        // else added to patch issue #1
-                        if (state.getBlock() == cnBlock) {
-                            worldIn.setBlockState(activatePos, state.with(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
-                        } else {
-                            cnNodeMap.remove(activatePos);
+                    ClustersNode link = this;
+                    do {
+                        HashSet<BlockPos> posToPower = new HashSet<>(link.cnNodeMap.keySet());
+                        posToUpdate.addAll(posToPower);
+                        for (BlockPos activatePos : posToPower) {
+                            BlockState state = worldIn.getBlockState(activatePos);
+                            // else added to patch issue #1
+                            if (state.getBlock() instanceof AbstractFloorMatBlock) {
+                                worldIn.setBlockState(activatePos, state.with(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                            } else { // This should never happen
+                                link.cnNodeMap.remove(activatePos);
+                            }
                         }
-                    }
+                        if (link.cnLink != null) {
+                            link = idRegistry.get(link.cnLink);
+                        }
+                    } while (link != this);
                 }
             }
             // custom version of notifyNeighborsOfStateChange
-            broadcastToNeighbors(worldIn,posToIterate);
+            broadcastToNeighbors(worldIn,posToUpdate);
             return true;
         }
         return false;
     }
 
     void depowerNode(World worldIn) {
-        HashSet<BlockPos> posToIterate = new HashSet<>(cnNodeMap.keySet());
+        HashSet<BlockPos> posToUpdate = new HashSet<>();
         synchronized (this) {
-            for (BlockPos deactivatePos : posToIterate) {
-                BlockState oldState = worldIn.getBlockState(deactivatePos);
-                if ( oldState.getBlock() == cnBlock ) {
-                    worldIn.setBlockState(deactivatePos, oldState.with(POWERED, false), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
-                } else {
-                    cnNodeMap.remove(deactivatePos);
+            ClustersNode link = this;
+            do {
+                HashSet<BlockPos> posToDepower = new HashSet<>(link.cnNodeMap.keySet());
+                posToUpdate.addAll(posToDepower);
+                for (BlockPos deactivatePos : posToDepower) {
+                    BlockState oldState = worldIn.getBlockState(deactivatePos);
+                    if ( oldState.getBlock() instanceof AbstractFloorMatBlock ) {
+                        worldIn.setBlockState(deactivatePos, oldState.with(POWERED, false), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                    } else { // this should never happen
+                        link.cnNodeMap.remove(deactivatePos);
+                    }
                 }
-            }
+                if (link.cnLink != null) {
+                    link = idRegistry.get(link.cnLink);
+                }
+            } while (link != this);
         }
-        broadcastToNeighbors(worldIn,posToIterate);
+        broadcastToNeighbors(worldIn,posToUpdate);
     }
 
-    boolean isPowered() { return cnNodeMap.containsValue(true); }
+    boolean isPowered() {
+        ClustersNode link = this;
+        do {
+            if (link.cnNodeMap.containsValue(true)) { return true; }
+            if (link.cnLink != null) {
+                link = idRegistry.get(link.cnLink);
+            }
+
+        } while (link != this);
+        return false;
+    }
 
     // returns whether the node depowered so we can play the deactivate sound.
     boolean depowerBlock(World worldIn, BlockPos pos) {
@@ -248,7 +309,32 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
         synchronized (this) {
             cnUUID_Set.addAll(otherNode.cnUUID_Set);
             cnNodeMap.putAll(otherNode.cnNodeMap);
+            if (!isLinked(otherNode)) {
+                if ( (cnLink != null) || (otherNode.cnLink != null) ) {
+                    linkTo(otherNode);
+                }
+            }
+            if (cnLink != null) {
+                idRegistry.get(otherNode.cnLinkBack).cnLink = otherNode.cnLink;
+                idRegistry.get(otherNode.cnLink).cnLinkBack = otherNode.cnLinkBack;
+                if (cnLink == cnID) {
+                    cnID = null; // If I add a second use for the ID, this needs to change
+                    cnLink = null;
+                    cnLinkBack = null;
+                }
+            }
         }
+    }
+
+    boolean isLinked(ClustersNode otherNode) {
+        if ( (cnLink == null) || (otherNode.cnLink == null) ) { return false; }
+        UUID otherID = otherNode.getID();
+        ClustersNode link = this;
+        do {
+            if (link.cnLink.equals(otherID)) { return true; }
+            link = idRegistry.get(link.cnLink);
+        } while (link != this);
+        return false;
     }
 
     public void removePos(World worldIn, BlockPos pos) {
@@ -309,6 +395,15 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
             }
             returnDistinctNodes.add(newNode);
         }
+        if (cnLink != null) {
+            for (ClustersNode node : returnDistinctNodes) {
+                node.cnLinkBack = cnLinkBack;
+                idRegistry.get(cnLinkBack).cnLink = node.getID();
+                cnLinkBack = node.cnID;
+            }
+            idRegistry.get(cnLinkBack).cnLink = cnLink;
+            idRegistry.get(cnLink).cnLinkBack =  cnLinkBack;
+        }
         return returnDistinctNodes;
     }
 
@@ -349,4 +444,65 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
         return failedPosSet.size();
     }
 
+    public void removeLink(World worldIn, boolean wasPowered) {
+        if (cnLink != null) {
+            idRegistry.get(cnLinkBack).cnLink = cnLink;
+            ClustersNode node = idRegistry.get(cnLink);
+            node.cnLinkBack = cnLinkBack;
+            node.verifyLink();
+            wipeLink();
+            if (wasPowered && !isPowered()) {
+                depowerNode(worldIn);
+            } else
+            if (wasPowered && !node.isPowered()) {
+                node.depowerNode(worldIn);
+            }
+        }
+    }
+
+    private void wipeLink() {
+        cnID = null;
+        cnLink = null;
+        cnLinkBack = null;
+    }
+
+    private void verifyLink() {
+        if (cnLink == cnID) {
+            wipeLink();
+        }
+    }
+
+    public void linkTo(ClustersNode linkNode) {
+        /*  Possible permutations for this and link:
+            -HAS-LOOP-  ----THIS----    ----LINK----
+            THIS/LINK   BACK    LINK    BACK    LINK
+             not/not    link    link    this    this
+            loop/not    same    link    this    t.l*
+             not/loop   l.b*    link    this    same
+            loop/loop   same    link    this    same    (l.b--t.l)
+        */
+        if (linkNode.cnLink == null) {
+            if (cnLink == null) {
+                linkNode.cnLink = getID();
+                cnLinkBack = linkNode.getID();
+            } else {
+                linkNode.cnLink = cnLink;
+                idRegistry.get(cnLink).cnLinkBack = linkNode.getID();
+            }
+        } else {
+            if (cnLink == null) {
+                cnLinkBack = linkNode.cnLinkBack;
+                idRegistry.get(cnLinkBack).cnLink = getID();
+            } else {
+                idRegistry.get(linkNode.cnLinkBack).cnLink = cnLink;
+                idRegistry.get(cnLink).cnLinkBack = linkNode.cnLinkBack;
+            }
+        }
+        cnLink = linkNode.cnID;
+        linkNode.cnLinkBack = cnID;
+    }
+
+    public boolean hasDirectPowerMarked(BlockPos pos) {
+        return cnNodeMap.get(pos);
+    }
 }

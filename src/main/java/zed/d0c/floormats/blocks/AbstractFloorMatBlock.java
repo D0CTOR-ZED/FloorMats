@@ -16,16 +16,22 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.EnderPearlItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -42,6 +48,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import zed.d0c.clusters.Clusters;
+import zed.d0c.floormats.setup.Registration;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,6 +57,7 @@ import java.util.*;
 
 import static net.minecraft.block.SixWayBlock.FACING_TO_PROPERTY_MAP;
 import static net.minecraft.util.Hand.MAIN_HAND;
+import static zed.d0c.floormats.FloorMats.MODID;
 
 @ParametersAreNonnullByDefault
 public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock implements IWaterLoggable {
@@ -64,6 +72,8 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
 
     private static final HashMap<PlayerEntity,BlockPos> toolUsedPosition = new HashMap<>();
     private static final HashMap<PlayerEntity,ItemStack> toolUsedStack = new HashMap<>();
+    private static final HashMap<PlayerEntity,BlockPos> linkUsedPosition = new HashMap<>();
+    protected static final Random random = new Random();
 
     protected AbstractFloorMatBlock(AbstractFloorMatBlock.Sensitivity sensitivityIn, Block.Properties properties) {
         super(properties);
@@ -119,8 +129,7 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
 
     protected int computeRedstoneStrength(World worldIn, BlockPos pos) {
         BlockPos iPos = pos.toImmutable();
-        // still using smaller pressure plate shape.  Not sure if there is a reason
-        // they made plates slightly smaller.
+        // still using smaller pressure plate shape.  Not sure if there is a reason they made plates slightly smaller.
         AxisAlignedBB axisalignedbb = PRESSURE_AABB.offset(iPos);
 
         int redstoneStrength = 0;
@@ -178,8 +187,7 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
 
     @Override
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-        if (!worldIn.isRemote) {
-            // Maybe this could be skipped if POWERED and the Node has already marked it as directly powered.
+        if ( (!worldIn.isRemote) && (!FloorMatClusters.hasDirectPower(state, worldIn,pos)) ) {
             computeRedstoneStrength(worldIn, pos);
         }
     }
@@ -330,8 +338,7 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
         if ( fromPos.equals(pos.down()) &&
                 (!worldIn.isRemote()) &&
                 worldIn.isBlockPowered(fromPos) ) {
-
-            // this should pulse the node.  It will turn on, tick, then turn off.
+            // this will pulse the node.  It will turn on, tick, then turn off.
             BlockPos iPos = pos.toImmutable();
             if (FloorMatClusters.applyDirectPower(worldIn, iPos, null)) {
                 // 30 = Length of wooden button.  Timing of power should equal or exceed this for aesthetics
@@ -341,47 +348,108 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
         }
     }
 
-    // Right-click editing of floor mat block connections
-    // First block activated stores a block position and item stack.
-    // Second activation with the same item stack attempts to alter the connection between the first and second position.
+    // Be mindful that the first pos could have been set in a different dimension.  Linking is not cross-dimensional.
+    // Also, first block could have been altered, basically always verify first block is correct.
     @Override
     @Nonnull
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState stateIn, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-        if ( (!worldIn.isRemote) && FloorMatClusters.canAlter(worldIn, pos, stateIn, player.getUniqueID()) ) {
-            ItemStack itemInHand = (hand == MAIN_HAND) ? player.inventory.getCurrentItem() : player.inventory.offHandInventory.get(0);
-            if ((toolUsedPosition.containsKey(player)) && (toolUsedStack.get(player).equals(itemInHand))) {
-                BlockPos firstPos = toolUsedPosition.get(player);
-                // player selected a block and is using the same item to select a second block
-                for (Direction direction : Direction.Plane.HORIZONTAL) {
-                    BooleanProperty directionProperty = FACING_TO_PROPERTY_MAP.get(direction);
-                    if ( (pos.offset(direction).equals(firstPos)) && (worldIn.getBlockState(firstPos).getBlock() == stateIn.getBlock()) ) {
-                        // the two positions are adjacent and the same type of block
-                        BlockState newState = stateIn.cycle(directionProperty);
-                        BlockState oldFirstBS = worldIn.getBlockState(firstPos);
-                        BlockState newFirstBS = oldFirstBS.cycle(FACING_TO_PROPERTY_MAP.get(direction.getOpposite()));
-                        worldIn.setBlockState(firstPos, newFirstBS, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
-                        worldIn.markBlockRangeForRenderUpdate(pos, oldFirstBS, newFirstBS);
-                        worldIn.setBlockState(pos, newState, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
-                        worldIn.markBlockRangeForRenderUpdate(pos, stateIn, newState);
-                        toolUsedPosition.remove(player);
-                        toolUsedStack.remove(player);
-                        if (newState.get(directionProperty)) {
-                            // made a connection
-                            FloorMatClusters.addToClusters(worldIn, pos, newState);
-                        } else {
-                            // removed a connection
-                            FloorMatClusters.alterClusters(worldIn, pos, newState);
-                        }
-                        return ActionResultType.SUCCESS;
-                    }
+        ItemStack itemInHand = (hand == MAIN_HAND) ? player.inventory.getCurrentItem() : player.inventory.offHandInventory.get(0);
+        if ((worldIn.isRemote)) {
+            if (itemInHand.getItem() instanceof EnderPearlItem) {
+                BlockPos iPos = pos.toImmutable();
+                double x = iPos.getX();
+                double y = iPos.getY();
+                double z = iPos.getZ();
+                for (int i = 0; i < 32; ++i) {
+                    worldIn.addParticle(ParticleTypes.PORTAL, x + random.nextDouble(), y + random.nextDouble() * 0.4D, z + random.nextDouble(), random.nextGaussian(), 0.0D, random.nextGaussian());
                 }
             }
-            // make note of the position and tool used to select a block
-            toolUsedPosition.put(player,pos);
-            toolUsedStack.put(player,itemInHand);
+        }
+        if (!worldIn.isRemote) {
+            final float pitch = 0.8F / (random.nextFloat() * 0.4F + 0.8F);
+            if (FloorMatClusters.canAlter(worldIn, pos, stateIn, player.getUniqueID())) {
+                BlockPos iPos = pos.toImmutable();
+                if (isConnector(itemInHand.getItem())) {
+                    worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_WRENCHED.get(), SoundCategory.NEUTRAL, 0.5F, pitch );
+                    if ((toolUsedPosition.containsKey(player)) && (toolUsedStack.get(player).equals(itemInHand))) {
+                        BlockPos firstPos = toolUsedPosition.get(player);
+                        BlockState oldFirstBS = worldIn.getBlockState(firstPos);
+                        for (Direction direction : Direction.Plane.HORIZONTAL) {
+                            BooleanProperty directionProperty = FACING_TO_PROPERTY_MAP.get(direction);
+                            if ((iPos.offset(direction).equals(firstPos)) && (worldIn.getBlockState(firstPos).getBlock() == stateIn.getBlock())) {
+                                BlockState newState = stateIn.cycle(directionProperty);
+                                BlockState newFirstBS = oldFirstBS.cycle(FACING_TO_PROPERTY_MAP.get(direction.getOpposite()));
+                                worldIn.setBlockState(firstPos, newFirstBS, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                                worldIn.markBlockRangeForRenderUpdate(iPos, oldFirstBS, newFirstBS);
+                                worldIn.setBlockState(iPos, newState, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+                                worldIn.markBlockRangeForRenderUpdate(iPos, stateIn, newState);
+                                toolUsedPosition.remove(player);
+                                toolUsedStack.remove(player);
+                                if (newState.get(directionProperty)) {
+                                    FloorMatClusters.addToClusters(worldIn, iPos, newState);
+                                } else {
+                                    FloorMatClusters.alterClusters(worldIn, iPos, newState);
+                                }
+                                return ActionResultType.SUCCESS;
+                            }
+                        }
+                    }
+                    toolUsedPosition.put(player, iPos);
+                    toolUsedStack.put(player, itemInHand);
+                    return ActionResultType.SUCCESS;
+                }
+                if (isLinker(itemInHand.getItem())) {
+                    if (linkUsedPosition.containsKey(player)) {
+                        BlockPos firstPos = linkUsedPosition.get(player);
+                        BlockState firstBS = worldIn.getBlockState(firstPos);
+                        if ((firstBS.getBlock() instanceof AbstractFloorMatBlock)
+                                && FloorMatClusters.canAlter(worldIn, firstPos, firstBS, player.getUniqueID())) {
+                            if ( FloorMatClusters.linkClusters(worldIn, iPos, stateIn, firstPos, firstBS) ) {
+                                if (!player.abilities.isCreativeMode) {
+                                    if (itemInHand.getMaxStackSize() > 1) {
+                                        itemInHand.shrink(1);
+                                    } else if (itemInHand.attemptDamageItem(1, worldIn.rand, (ServerPlayerEntity) player)) {
+                                        itemInHand.setCount(0);
+                                    }
+                                    if (hand == MAIN_HAND) {
+                                        player.inventory.mainInventory.set(player.inventory.currentItem, itemInHand);
+                                    } else {
+                                        player.inventory.offHandInventory.set(0, itemInHand);
+                                    }
+                                }
+                                worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_LINKED.get(), SoundCategory.NEUTRAL, 0.5F, pitch + 0.4F);
+                            } else {
+                                worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_UNLINKED.get(), SoundCategory.NEUTRAL, 0.5F, pitch + 0.4F);
+                            }
+                            linkUsedPosition.remove(player);
+                        } else {
+                            linkUsedPosition.put(player, iPos);
+                            worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_MARKED.get(), SoundCategory.NEUTRAL, 0.5F, pitch);
+                        }
+                    } else {
+                        linkUsedPosition.put(player, iPos);
+                        worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_MARKED.get(), SoundCategory.NEUTRAL, 0.5F, pitch);
+                    }
+                    player.getCooldownTracker().setCooldown(itemInHand.getItem(), 20);
+                    player.addStat(Stats.ITEM_USED.get(itemInHand.getItem()));
+                    return ActionResultType.SUCCESS;
+                }
+            } else {
+                if (isLinker(itemInHand.getItem())) {
+                    worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_DENIED.get(), SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                }
+            }
         }
         return ActionResultType.SUCCESS;
+    }
+
+    private boolean isConnector(Item item) {
+        return  (ItemTags.getCollection().getOrCreate(new ResourceLocation(MODID, "connectors")).contains(item));
+    }
+
+    private boolean isLinker(Item item) {
+        return  (ItemTags.getCollection().getOrCreate(new ResourceLocation(MODID, "linkers")).contains(item));
     }
 
 }
