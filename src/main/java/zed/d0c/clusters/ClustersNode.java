@@ -66,10 +66,10 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     private final HashSet<UUID> cnUUID_Set = new HashSet<>();
     private final HashMap<BlockPos, Boolean> cnNodeMap = new HashMap<>();
     private UUID cnID;
-    private UUID cnLink;
+    UUID cnLink;
     private UUID cnLinkBack;
 
-    private static final HashMap<UUID, ClustersNode> idRegistry = new HashMap<>();
+    static final HashMap<UUID, ClustersNode> idRegistry = new HashMap<>();
 
     private static final String BLOCK_TYPE_KEY      = "cnBlockName";
     private static final String NODE_MAP_KEY        = "cnNodeMap";
@@ -165,6 +165,24 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
         return false;
     }
 
+    private static class loopParser {
+        private final HashSet<ClustersNode> usedNodes = new HashSet<>();
+        private ClustersNode cursor;
+        loopParser(ClustersNode start) {
+            cursor=start;
+        }
+        ClustersNode get() {
+            return cursor;
+        }
+        boolean next() {
+            usedNodes.add(cursor);
+            if (cursor.cnLink != null) {
+                cursor = idRegistry.get(cursor.cnLink);
+            }
+            return !usedNodes.contains(cursor);
+        }
+    }
+
     private void broadcastToNeighbors(World worldIn, HashSet<BlockPos> posToBroadcast) {
         // give one chance to cancel this... not sure why this would ever happen.
         // Don't think it needs to be checked for every single iteration.
@@ -233,9 +251,9 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
                     cnNodeMap.put(iPos, true);
                 }
                 if (!alreadyPowered) {
-                    ClustersNode link = this;
+                    loopParser loop = new loopParser(this);
                     do {
-                        HashSet<BlockPos> posToPower = new HashSet<>(link.cnNodeMap.keySet());
+                        HashSet<BlockPos> posToPower = new HashSet<>(loop.get().cnNodeMap.keySet());
                         posToUpdate.addAll(posToPower);
                         for (BlockPos activatePos : posToPower) {
                             BlockState state = worldIn.getBlockState(activatePos);
@@ -243,13 +261,10 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
                             if (state.getBlock() instanceof AbstractFloorMatBlock) {
                                 worldIn.setBlockState(activatePos, state.with(POWERED, true), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
                             } else { // This should never happen
-                                link.cnNodeMap.remove(activatePos);
+                                loop.get().cnNodeMap.remove(activatePos);
                             }
                         }
-                        if (link.cnLink != null) {
-                            link = idRegistry.get(link.cnLink);
-                        }
-                    } while (link != this);
+                    } while (loop.next());
                 }
             }
             // custom version of notifyNeighborsOfStateChange
@@ -262,35 +277,28 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     void depowerNode(World worldIn) {
         HashSet<BlockPos> posToUpdate = new HashSet<>();
         synchronized (this) {
-            ClustersNode link = this;
+            loopParser loop = new loopParser(this);
             do {
-                HashSet<BlockPos> posToDepower = new HashSet<>(link.cnNodeMap.keySet());
+                HashSet<BlockPos> posToDepower = new HashSet<>(loop.get().cnNodeMap.keySet());
                 posToUpdate.addAll(posToDepower);
                 for (BlockPos deactivatePos : posToDepower) {
                     BlockState oldState = worldIn.getBlockState(deactivatePos);
                     if ( oldState.getBlock() instanceof AbstractFloorMatBlock ) {
                         worldIn.setBlockState(deactivatePos, oldState.with(POWERED, false), Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
                     } else { // this should never happen
-                        link.cnNodeMap.remove(deactivatePos);
+                        loop.get().cnNodeMap.remove(deactivatePos);
                     }
                 }
-                if (link.cnLink != null) {
-                    link = idRegistry.get(link.cnLink);
-                }
-            } while (link != this);
+            } while (loop.next());
         }
         broadcastToNeighbors(worldIn,posToUpdate);
     }
 
     boolean isPowered() {
-        ClustersNode link = this;
+        loopParser loop = new loopParser(this);
         do {
-            if (link.cnNodeMap.containsValue(true)) { return true; }
-            if (link.cnLink != null) {
-                link = idRegistry.get(link.cnLink);
-            }
-
-        } while (link != this);
+            if (loop.get().cnNodeMap.containsValue(true)) { return true; }
+        } while (loop.next());
         return false;
     }
 
@@ -329,11 +337,10 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     boolean isLinked(ClustersNode otherNode) {
         if ( (cnLink == null) || (otherNode.cnLink == null) ) { return false; }
         UUID otherID = otherNode.getID();
-        ClustersNode link = this;
+        loopParser loop = new loopParser(this);
         do {
-            if (link.cnLink.equals(otherID)) { return true; }
-            link = idRegistry.get(link.cnLink);
-        } while (link != this);
+            if (loop.get().cnLink.equals(otherID)) { return true; }
+        } while (loop.next());
         return false;
     }
 
@@ -505,4 +512,5 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     public boolean hasDirectPowerMarked(BlockPos pos) {
         return cnNodeMap.get(pos);
     }
+
 }
