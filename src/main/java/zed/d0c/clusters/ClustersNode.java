@@ -11,6 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -77,6 +78,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     private static final String ID_KEY              = "cnID"; // only assigned when needed
     private static final String LINK_KEY            = "cnLink";
     private static final String LINK_BACK_KEY       = "cnLinkBack";
+    protected static final Random random = new Random();
 
     ClustersNode(Block blockType, HashSet<UUID> uuidSet) {
         cnBlock       = blockType;
@@ -507,6 +509,17 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
         }
         cnLink = linkNode.cnID;
         linkNode.cnLinkBack = cnID;
+    }
+
+    public void createLinkEffect(World worldIn) {
+        for (BlockPos pos : cnNodeMap.keySet()) {
+            int x = pos.getX();
+            int y = pos.getY();
+            int z = pos.getZ();
+            for (int i = 0; i<8; ++i) {
+                ((ServerWorld) worldIn).spawnParticle(ParticleTypes.PORTAL, x+random.nextDouble(), y+random.nextDouble(), z+random.nextDouble(), 1, 0.0D, 0.4D, 0.0D, 0.15F);
+            }
+        }
     }
 
     public boolean hasDirectPowerMarked(BlockPos pos) {

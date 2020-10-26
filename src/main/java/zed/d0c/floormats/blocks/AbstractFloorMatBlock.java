@@ -21,10 +21,8 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.EnderPearlItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -355,6 +353,7 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState stateIn, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
         ItemStack itemInHand = (hand == MAIN_HAND) ? player.inventory.getCurrentItem() : player.inventory.offHandInventory.get(0);
+        /* Moved particles to server
         if ((worldIn.isRemote)) {
             if (itemInHand.getItem() instanceof EnderPearlItem) {
                 BlockPos iPos = pos.toImmutable();
@@ -366,6 +365,7 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
                 }
             }
         }
+        */
         if (!worldIn.isRemote) {
             final float pitch = 0.8F / (random.nextFloat() * 0.4F + 0.8F);
             if (FloorMatClusters.canAlter(worldIn, pos, stateIn, player.getUniqueID())) {
@@ -400,11 +400,13 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
                     return ActionResultType.SUCCESS;
                 }
                 if (isLinker(itemInHand.getItem())) {
+                    FloorMatClusters.linkEffects(worldIn,iPos,stateIn);
                     if (linkUsedPosition.containsKey(player)) {
                         BlockPos firstPos = linkUsedPosition.get(player);
                         BlockState firstBS = worldIn.getBlockState(firstPos);
                         if ((firstBS.getBlock() instanceof AbstractFloorMatBlock)
                                 && FloorMatClusters.canAlter(worldIn, firstPos, firstBS, player.getUniqueID())) {
+                            FloorMatClusters.linkEffects(worldIn,firstPos,firstBS);
                             if ( FloorMatClusters.linkClusters(worldIn, iPos, stateIn, firstPos, firstBS) ) {
                                 if (!player.abilities.isCreativeMode) {
                                     if (itemInHand.getMaxStackSize() > 1) {

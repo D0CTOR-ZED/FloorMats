@@ -275,6 +275,10 @@ public class Clusters {
         return true;
     }
 
+    public void linkEffects(World worldIn, BlockPos iPos, BlockState stateIn) {
+        getNode(worldIn,stateIn,iPos).createLinkEffect(worldIn);
+    }
+
     public boolean hasDirectPower(BlockState state, World worldIn, BlockPos pos) {
         return getNode(worldIn,state,pos).hasDirectPowerMarked(pos);
     }
