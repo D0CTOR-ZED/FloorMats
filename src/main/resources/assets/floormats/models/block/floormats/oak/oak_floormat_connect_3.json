@@ -1,8 +1,0 @@
-{
-  "parent": "floormats:block/floormats/floormat_base",
-  "textures": {
-    "top":    "floormats:block/floormats/oak/oak_floormatblock_connect_3",
-    "bottom": "floormats:block/floormats/oak/oak_floormatblock_connect_3",
-    "side":   "floormats:block/floormats/oak/oak_floormatblock_connect_0"
-  }
-}

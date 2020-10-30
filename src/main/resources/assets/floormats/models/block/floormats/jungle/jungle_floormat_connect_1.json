@@ -1,8 +1,0 @@
-{
-  "parent": "floormats:block/floormats/floormat_base",
-  "textures": {
-    "top":    "floormats:block/floormats/jungle/jungle_floormatblock_connect_1",
-    "bottom": "floormats:block/floormats/jungle/jungle_floormatblock_connect_1",
-    "side":   "floormats:block/floormats/jungle/jungle_floormatblock_connect_0"
-  }
-}

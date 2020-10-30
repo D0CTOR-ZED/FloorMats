@@ -1,7 +1,0 @@
-{
-  "parent": "floormats:block/floormats/floormat_inventory",
-  "textures": {
-    "top": "floormats:block/floormats/gold/gold_floormatblock_connect_0",
-    "side": "floormats:block/floormats/gold/gold_floormatblock_connect_0"
-  }
-}

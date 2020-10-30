@@ -1,8 +1,0 @@
-{
-  "parent": "floormats:block/floormats/floormat_base",
-  "textures": {
-    "top":    "floormats:block/floormats/spruce/spruce_floormatblock_connect_2a",
-    "bottom": "floormats:block/floormats/spruce/spruce_floormatblock_connect_2a_bottom",
-    "side":   "floormats:block/floormats/spruce/spruce_floormatblock_connect_0"
-  }
-}
