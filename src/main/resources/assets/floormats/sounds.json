@@ -1,0 +1,27 @@
+{
+  "floormats.marked": {
+    "category": "neutral",
+    "subtitle": "subtitle.floormats.marked",
+    "sounds": [ "floormats:floormats.marked" ]
+  },
+  "floormats.linked": {
+    "category": "neutral",
+    "subtitle": "subtitle.floormats.linked",
+    "sounds": [ "floormats:floormats.linked" ]
+  },
+  "floormats.unlinked": {
+    "category": "neutral",
+    "subtitle": "subtitle.floormats.unlinked",
+    "sounds": [ "floormats:floormats.unlinked" ]
+  },
+  "floormats.denied": {
+    "category": "neutral",
+    "subtitle": "subtitle.floormats.denied",
+    "sounds": [ "floormats:floormats.denied" ]
+  },
+  "floormats.wrenched": {
+    "category": "neutral",
+    "subtitle": "subtitle.floormats.wrenched",
+    "sounds": [ "floormats:floormats.wrenched" ]
+  }
+}

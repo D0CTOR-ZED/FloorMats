@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "optional": [
+    "#forge:ender_pearls",
+    "minecraft:ender_pearl",
+    "#forge:wands",
+    "appliedenergistics2:entropy_manipulator",
+    "appliedenergistics2:charged_staff",
+    "astralsorcery:linking_tool",
+    "bluepower:athame",
+    "botania:redstone_root",
+    "botania:dreamwood_twig",
+    "fluxnetworks:fluxconfigurator",
+    "fluxnetworks:adminconfigurator",
+    "forbidden_arcanus:draco_arcanus_staff",
+    "forbidden_arcanus:mystical_dagger",
+    "rsgauges:switchlink_pearl",
+    "rftoolsbase:dimensionalshard"
+  ],
+  "values": [
+  ]
+}
