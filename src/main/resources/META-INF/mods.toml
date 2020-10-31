@@ -62,6 +62,6 @@ Floor Mats is a simple mod adding multiblock pressure plates.
 [[dependencies.floormats]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.1,)"
+    versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"
