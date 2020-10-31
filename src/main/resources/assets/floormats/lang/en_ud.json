@@ -1,0 +1,45 @@
+{
+    "language"        : "English",
+    "language.code"   : "en_ud",
+    "language.region" : "Upside down",
+    
+    "block.floormats.acacia_floormat_block" : "ʇɐW ɹoolℲ ɐᴉɔɐɔ∀",
+    "block.floormats.birch_floormat_block"  : "ʇɐW ɹoolℲ ɥɔɹᴉq",
+    "block.floormats.darkoak_floormat_block": "ʇɐW ɹoolℲ ʞɐO ʞɹɐp",
+    "block.floormats.gold_floormat_block"   : "ʇɐW ɹoolℲ ploפ",
+    "block.floormats.iron_floormat_block"   : "ʇɐW ɹoolℲ uoɹI",
+    "block.floormats.jungle_floormat_block" : "ʇɐW ɹoolℲ ǝlƃunſ",
+    "block.floormats.oak_floormat_block"    : "ʇɐW ɹoolℲ ʞɐO",
+    "block.floormats.spruce_floormat_block" : "ʇɐW ɹoolℲ ǝɔnɹdS",
+    "block.floormats.stone_floormat_block"  : "ʇɐW ɹoolℲ ǝuoʇS",
+
+    "command.floormats"                     : "˙§a[ɔᴉdoʇ] dlǝɥ sʇɐɯɹoolɟ/§r ǝdʎʇ 'sɔᴉdoʇ ǝsoɥʇ ɥʇᴉʍ dlǝɥ ɹoℲ\n˙§adlǝɥ sʇɐɯɹoolɟ/§r ǝdʎʇ 'sɔᴉdoʇ dlǝɥ ɟo ʇsᴉl ɐ ʇǝƃ o┴\n\n§n¡pƎZ ɹO┴Ɔ0p ʎq sʇɐW ɹoolℲ oʇ ǝɯoɔlǝM§r",
+    "command.floormats.help"                : "˙§aᴉʞᴉʍ§r '§asǝdʎʇ§r '§aɹǝʍod§r '§aƃuᴉʞuᴉl§r '§aploƃ§r '§asuoᴉʇɔǝuuoɔ§r\n:sɔᴉdoʇ ƃuᴉʍolloɟ ǝɥʇ ɹoɟ ǝlqɐlᴉɐʌɐ sᴉ dlǝH",
+    "command.floormats.help.connections"    : "˙§aslooʇ sʇɐɯɹoolɟ/§r oslɐ ǝǝS  ˙ɹoʇɔǝuuoɔ ɐ ɥʇᴉʍ sʞɔolq ʇɐɯ ɹoolɟ ǝɥʇ ɟo ɥɔɐǝ ƃuᴉʞɔᴉlɔ-ʇɥƃᴉɹ ʎq sʞɔolq ʇɐɯ ɹoolɟ ʇuǝɔɐɾpɐ lɐɔᴉʇuǝpᴉ uǝǝʍʇǝq suoᴉʇɔǝuuoɔ ɯɹoɟǝɹ puɐ ʞɐǝɹq uɐɔ no⅄",
+    "command.floormats.help.gold"           : "˙(s)ɹǝʎɐld ǝɥʇ ʞuᴉlun llᴉʍ ʞɔolq ʇsɐl ǝɥʇ ƃuᴉʌoɯǝɹ ʎluO  ˙ǝzᴉs ɹoɟ pǝpǝǝu sɐ pǝʌoɯǝɹ puɐ ɹǝʎɐld ɥɔɐǝ ʎq pǝppɐ ǝɹɐ sʞɔolq ɟᴉ ʇɐɯ llɐɯs ɐ ǝɹɐɥs uɐɔ sdnoɹƃ ǝƃɹɐl os 'sʞɔolq ɔᴉɟᴉɔǝds oʇ pǝʞuᴉl ʇou ǝɹɐ sɹǝʎɐlԀ  ˙ʇɐɯ ɹoolɟ ǝɥʇ pǝɔɐld oɥʍ (s)ɹǝʎɐld ǝɥʇ ʎq pǝɹǝƃƃᴉɹʇ ǝɹɐ sʇɐɯ ɹoolɟ ploפ",
+    "command.floormats.help.linking"        : "˙§aslooʇ sʇɐɯɹoolɟ/§r oslɐ ǝǝS  ˙ǝɔᴉʍʇ ʇᴉ ƃuᴉʞɔᴉlɔ-ʇɥƃᴉɹ ʎq ʇɐɯ ɹoolɟ ɐ ʞuᴉlun uɐɔ no⅄  ˙ɹǝʞuᴉl ɐ ɥʇᴉʍ ʇɐɯ ɹoolɟ ɥɔɐǝ ƃuᴉʞɔᴉlɔ-ʇɥƃᴉɹ ʎq (uoᴉsuǝɯᴉp ǝɯɐs ǝɥʇ uᴉ) sʇɐɯ ɹoolɟ ǝldᴉʇlnɯ ʞuᴉl uɐɔ no⅄",
+    "command.floormats.help.power"          : "˙ǝslnd oʇ ʞɔolq ʇɐɥʇ uo ʇɐɯ ɹoolɟ ɐ ǝsnɐɔ llᴉʍ ʞɔolq ɐ ɟo ǝpᴉs ǝɥʇ uo pǝɔɐld uoʇʇnq ɐ 'ǝldɯɐxǝ ɹoℲ  ˙uo sᴉ ʇᴉ ʞɔolq ɐ ɯoɹɟ ɹǝʍod ǝuoʇspǝɹ sǝʌᴉǝɔǝɹ ʇᴉ uǝɥʍ ǝslnd llᴉʍ ʇɐɯ ɹoolɟ ∀",
+    "command.floormats.help.types"          : "\n˙§aploƃ dlǝɥ sʇɐɯɹoolɟ/§a oslɐ ǝǝS  ˙sɹǝʎɐld ʎq pǝʇɐʌᴉʇɔɐ :§olɐʇǝW§r\n\nsqoɯ puɐ sɹǝʎɐld ʎq pǝɹǝƃƃᴉɹʇ :§oǝuoʇS§r\n\n˙ɯǝʇᴉ pǝddoɹp ɹo qoɯ 'ɹǝʎɐld ʎuɐ ʎq pǝɹǝƃƃᴉɹʇ §o:uǝpooM§r",
+    "command.floormats.help.wiki"           : "https://github.com/D0CTOR-ZED/FloorMats/wiki :slᴉɐʇǝp ǝɹoɯ ɹoɟ ᴉʞᴉʍ ǝɥʇ ʇno ʞɔǝɥƆ",
+
+    "command.floormats.reset.corrections"   : "˙ǝpɐɯ suoᴉʇɔǝɹɹoɔ",
+    "command.floormats.reset.feedback"      : "¡ʇǝsǝɹ ɐʇɐp sʇɐW ɹoolℲ",
+
+    "command.floormats.tools.wands"         : "\n§n:(§a§nsɹǝʞuᴉl:sʇɐɯɹoolɟ§r§n :ƃɐʇ) slooʇ ƃuᴉʞuᴉl ǝʇoɯǝɹ§r\n",
+    "command.floormats.tools.wrenches"      : "\n§n:(§a§nsɹoʇɔǝuuoɔ:sʇɐɯɹoolɟ§r§n :ƃɐʇ) slooʇ loɹʇuoɔ uoᴉʇɔǝuuoƆ§r\n",
+    "info.floormats.floormat_block"     : "˙ǝʇɐld ǝɹnssǝɹd ʞɔolqᴉʇlnW",
+    "info.floormats.trigger.everything" : "˙ƃuᴉɥʇʎɹǝʌǝ ʎq pǝɹǝƃƃᴉɹ┴",
+    "info.floormats.trigger.mobs"       : "˙sǝᴉʇᴉʇuǝ ƃuᴉʌᴉl ʎq pǝɹǝƃƃᴉɹ┴",
+    "info.floormats.trigger.entities"   : "˙sǝᴉʇᴉʇuǝ ʎq pǝɹǝƃƃᴉɹ┴",
+    "info.floormats.trigger.players"    : "˙sɹǝʎɐld ʎq pǝɹǝƃƃᴉɹ┴",
+
+    "_comment"              : "Creative Tabs",
+    "itemGroup.floormats"   : "sʇɐW ɹoolℲ",
+
+    "subtitle.floormats.marked"     : "˙pǝʞɹɐɯ ʇɐW ɹoolℲ",
+    "subtitle.floormats.linked"     : "˙pǝʞuᴉl ʇɐW ɹoolℲ",
+    "subtitle.floormats.unlinked"   : "˙pǝʞuᴉlun ʇɐW ɹoolℲ",
+    "subtitle.floormats.denied"     : "˙ssǝɔɔɐ pǝᴉuǝp ʇɐW ɹoolℲ",
+    "subtitle.floormats.wrenched"   : "˙pǝɥɔuǝɹʍ ʇɐW ɹoolℲ"
+}
+
