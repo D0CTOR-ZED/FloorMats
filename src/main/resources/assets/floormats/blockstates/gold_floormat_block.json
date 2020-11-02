@@ -1,0 +1,69 @@
+{
+  "variants": {
+    "north=false,east=false,south=false,west=false": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_0",
+      "uvlock": true
+    },
+    "north=true,east=false,south=false,west=false": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_1a",
+      "y": 0
+    },
+    "north=false,east=true,south=false,west=false": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_1b",
+      "y": 90
+    },
+    "north=false,east=false,south=true,west=false": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_1a",
+      "y": 180
+    },
+    "north=false,east=false,south=false,west=true": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_1b",
+      "y": 270
+    },
+    "north=false,east=false,south=true,west=true": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_2a",
+      "y": 180
+    },
+    "north=false,east=true,south=true,west=false": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_2b",
+      "y": 0
+    },
+    "north=true,east=true,south=false,west=false": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_2a",
+      "y": 0
+    },
+    "north=true,east=false,south=false,west=true": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_2b",
+      "y": 180
+    },
+    "north=false,east=true,south=false,west=true": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_2sa",
+      "y": 0
+    },
+    "north=true,east=false,south=true,west=false": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_2sb",
+      "y": 0
+    },
+    "north=false,east=true,south=true,west=true": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_3a",
+      "y": 180
+    },
+    "north=true,east=false,south=true,west=true": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_3b",
+      "y": 270
+    },
+    "north=true,east=true,south=false,west=true": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_3a",
+      "y": 0
+    },
+    "north=true,east=true,south=true,west=false": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_3b",
+      "y": 90
+    },
+    "north=true,east=true,south=true,west=true": {
+      "model": "floormats:block/floormats/gold/gold_floormat_connect_4",
+      "uvlock": true
+    }
+  }
+}
+

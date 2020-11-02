@@ -1,0 +1,8 @@
+{
+  "parent": "floormats:block/floormats/floormat_base",
+  "textures": {
+    "top":    "floormats:block/floormats/iron/iron_floormatblock_connect_2sb",
+    "bottom": "floormats:block/floormats/iron/iron_floormatblock_connect_2sb",
+    "side":   "floormats:block/floormats/iron/iron_floormatblock_connect_0"
+  }
+}
