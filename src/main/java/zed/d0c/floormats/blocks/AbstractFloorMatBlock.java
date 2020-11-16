@@ -185,7 +185,8 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
 
     @Override
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-        if ( (!worldIn.isRemote) && (!FloorMatClusters.hasDirectPower(state, worldIn,pos)) ) {
+        // hasNode is needed as work-around for post-existence entity collisions ('this' block already removed) from what seems to be multi-threaded performance enhancements mod Performant
+        if ( (!worldIn.isRemote) && FloorMatClusters.hasNode(worldIn,state,pos) && (!FloorMatClusters.hasDirectPower(state, worldIn,pos)) ) {
             computeRedstoneStrength(worldIn, pos);
         }
     }

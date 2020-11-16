@@ -69,6 +69,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     private UUID cnID;
     UUID cnLink;
     private UUID cnLinkBack;
+    // private final HashMap<UUID,Long> accessLog = new HashMap<>();
 
     static final HashMap<UUID, ClustersNode> idRegistry = new HashMap<>();
 
@@ -78,6 +79,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     private static final String ID_KEY              = "cnID"; // only assigned when needed
     private static final String LINK_KEY            = "cnLink";
     private static final String LINK_BACK_KEY       = "cnLinkBack";
+    // private static final String ACCESS_LOG_KEY      = "cnAccessLog";
     protected static final Random random = new Random();
 
     ClustersNode(Block blockType, HashSet<UUID> uuidSet) {
@@ -156,6 +158,10 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
         idRegistry.put(cnID,this);
         return cnID;
     }
+
+    public boolean isEmpty() { return cnNodeMap.isEmpty(); }
+
+    public int getSize() { return cnNodeMap.keySet().size(); }
 
     boolean contains(Block block, BlockPos pos) {
         // this is where a check for bounds might prevent searching
@@ -462,8 +468,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
             wipeLink();
             if (wasPowered && !isPowered()) {
                 depowerNode(worldIn);
-            } else
-            if (wasPowered && !node.isPowered()) {
+            } else if (wasPowered && !node.isPowered()) {
                 node.depowerNode(worldIn);
             }
         }
