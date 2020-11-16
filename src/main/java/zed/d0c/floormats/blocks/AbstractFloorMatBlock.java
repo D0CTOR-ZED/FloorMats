@@ -37,7 +37,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.Color;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -183,7 +186,8 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
 
     @Override
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-        if ( (!worldIn.isRemote) && (!FloorMatClusters.hasDirectPower(state, worldIn,pos)) ) {
+        // hasNode is needed as work-around for post-existence entity collisions ('this' block already removed) from what seems to be multi-threaded performance enhancements mod Performant
+        if ( (!worldIn.isRemote) && FloorMatClusters.hasNode(worldIn,state,pos) && (!FloorMatClusters.hasDirectPower(state, worldIn,pos)) ) {
             computeRedstoneStrength(worldIn, pos);
         }
     }

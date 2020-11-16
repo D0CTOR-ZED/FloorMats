@@ -8,7 +8,6 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package zed.d0c.floormats;
 
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,6 +17,8 @@ import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import zed.d0c.clusters.Clusters;
 import zed.d0c.floormats.setup.Registration;
 import zed.d0c.punchcards.PunchCards;
+
+import java.util.Objects;
 
 // Reminder: This value needs to match the entry in META-INF/mods.toml
 @Mod(FloorMats.MODID)
@@ -38,9 +39,7 @@ public class FloorMats {
     public void serverStarted(FMLServerStartedEvent event) {
         // Assuming OVERWORLD is present.  Could maybe getWorlds() and try to give each world it's own save/load logic.
         ServerWorld world = event.getServer().getWorld(World.OVERWORLD);
-        assert world != null;
-        assert false;
-        PunchCards worldData = world.getSavedData().getOrCreate(PunchCards::new,PunchCards.getDataName());
+        PunchCards worldData = Objects.requireNonNull(world).getSavedData().getOrCreate(PunchCards::new,PunchCards.getDataName());
         PunchCards.setInstance(worldData);
     }
 

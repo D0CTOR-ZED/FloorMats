@@ -121,6 +121,16 @@ public class Clusters {
         return newNode;
     }
 
+    public boolean hasNode(World worldIn, BlockState state, BlockPos pos) {
+        Block block = state.getBlock();
+        for (ClustersNode node : CLUSTERS_REGISTRY.getClusterSet(worldIn)) {
+            if (node.contains(block, pos)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // needs to return true if iPos wasn't already marked as directly powered (regardless of whether mat was previously powered
     // this will determine if the block needs to tick.  It will tick until not directly powered.
     public boolean applyDirectPower(World worldIn, BlockPos iPos, @Nullable ArrayList<PlayerEntity> playerList) {
@@ -246,9 +256,16 @@ public class Clusters {
 
     public static int cmdReset(ServerWorld serverWorld) {
         int correctionCount = 0;
-        for (RegistryKey<World> dim : CLUSTERS_REGISTRY.keySet() ) {
-            for (ClustersNode node : CLUSTERS_REGISTRY.get(dim)) {
-                correctionCount += node.cmdResetNode(serverWorld);
+        synchronized (Clusters.getClustersRegistry()) {
+            for (RegistryKey<World> dim : CLUSTERS_REGISTRY.keySet()) {
+                ClustersSet emptyNodes = new ClustersSet();
+                for (ClustersNode node : CLUSTERS_REGISTRY.get(dim)) {
+                    correctionCount += node.cmdResetNode(serverWorld);
+                    if (node.isEmpty()) {
+                        emptyNodes.add(node);
+                    }
+                }
+                CLUSTERS_REGISTRY.get(dim).removeAll(emptyNodes);
             }
         }
         PunchCards.setDirty();

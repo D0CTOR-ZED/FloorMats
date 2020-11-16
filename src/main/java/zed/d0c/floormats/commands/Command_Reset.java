@@ -17,7 +17,7 @@ public class Command_Reset implements Command<CommandSource> {
 
     private static final Command_Reset CMD = new Command_Reset();
 
-    // Parameter 'dispatcher' is never used
+    @SuppressWarnings("unused") // Parameter 'dispatcher' is never used
     public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher) {
         return Commands.literal("reset")
                 .requires(cs -> cs.hasPermissionLevel(0))
@@ -25,6 +25,7 @@ public class Command_Reset implements Command<CommandSource> {
     }
 
     // Exception 'com.mojang.brigadier.exceptions.CommandSyntaxException' is never thrown in the method
+    @SuppressWarnings("RedundantThrows")
     @Override
     public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
         context.getSource().sendFeedback(new TranslationTextComponent("command.floormats.reset.feedback"), false);
