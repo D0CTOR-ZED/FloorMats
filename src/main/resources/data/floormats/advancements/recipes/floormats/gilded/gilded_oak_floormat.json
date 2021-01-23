@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "floormats:floormats/gilded_oak_floormat_block"
+      "floormats:floormats/gilded/gilded_oak_floormat_block"
     ]
   },
   "criteria": {
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "floormats:floormats/gilded_oak_floormat_block"
+        "recipe": "floormats:floormats/gilded/gilded_oak_floormat_block"
       }
     }
   },
