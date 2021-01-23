@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "floormats:gilded_spruce_floormat_item"
+          "name": "floormats:gilded/gilded_spruce_floormat_item"
         }
       ]
     }
