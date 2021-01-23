@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "gilded_acacia_floormat_block",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "floormats:gilded_acacia_floormat_item"
+        }
+      ]
+    }
+  ]
+}

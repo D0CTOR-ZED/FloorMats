@@ -2,15 +2,23 @@
     "language"        : "English",
     "language.code"   : "en_ud",
     "language.region" : "Upside down",
-    
+
     "block.floormats.acacia_floormat_block" : "ʇɐW ɹoolℲ ɐᴉɔɐɔ∀",
     "block.floormats.birch_floormat_block"  : "ʇɐW ɹoolℲ ɥɔɹᴉq",
     "block.floormats.darkoak_floormat_block": "ʇɐW ɹoolℲ ʞɐO ʞɹɐp",
-    "block.floormats.gold_floormat_block"   : "ʇɐW ɹoolℲ ploפ",
-    "block.floormats.iron_floormat_block"   : "ʇɐW ɹoolℲ uoɹI",
     "block.floormats.jungle_floormat_block" : "ʇɐW ɹoolℲ ǝlƃunſ",
     "block.floormats.oak_floormat_block"    : "ʇɐW ɹoolℲ ʞɐO",
     "block.floormats.spruce_floormat_block" : "ʇɐW ɹoolℲ ǝɔnɹdS",
+
+    "block.floormats.gilded_acacia_floormat_block" : "ʇɐW ɹoolℲ ɐᴉɔɐɔ∀ pǝplᴉפ",
+    "block.floormats.gilded_birch_floormat_block"  : "ʇɐW ɹoolℲ ɥɔɹᴉq pǝplᴉפ",
+    "block.floormats.gilded_darkoak_floormat_block": "ʇɐW ɹoolℲ ʞɐO ʞɹɐp pǝplᴉפ",
+    "block.floormats.gilded_jungle_floormat_block" : "ʇɐW ɹoolℲ ǝlƃunſ pǝplᴉפ",
+    "block.floormats.gilded_oak_floormat_block"    : "ʇɐW ɹoolℲ ʞɐO pǝplᴉפ",
+    "block.floormats.gilded_spruce_floormat_block" : "ʇɐW ɹoolℲ ǝɔnɹdS pǝplᴉפ",
+
+    "block.floormats.gold_floormat_block"   : "ʇɐW ɹoolℲ ploפ",
+    "block.floormats.iron_floormat_block"   : "ʇɐW ɹoolℲ uoɹI",
     "block.floormats.stone_floormat_block"  : "ʇɐW ɹoolℲ ǝuoʇS",
 
     "command.floormats"                     : "˙§a[ɔᴉdoʇ] dlǝɥ sʇɐɯɹoolɟ/§r ǝdʎʇ 'sɔᴉdoʇ ǝsoɥʇ ɥʇᴉʍ dlǝɥ ɹoℲ\n˙§adlǝɥ sʇɐɯɹoolɟ/§r ǝdʎʇ 'sɔᴉdoʇ dlǝɥ ɟo ʇsᴉl ɐ ʇǝƃ o┴\n\n§n¡pƎZ ɹO┴Ɔ0p ʎq sʇɐW ɹoolℲ oʇ ǝɯoɔlǝM§r",

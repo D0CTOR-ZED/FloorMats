@@ -3,11 +3,19 @@
     "block.floormats.acacia_floormat_block" : "Acacia Floor Mat",
     "block.floormats.birch_floormat_block"  : "Birch Floor Mat",
     "block.floormats.darkoak_floormat_block": "Dark Oak Floor Mat",
-    "block.floormats.gold_floormat_block"   : "Gold Floor Mat",
-    "block.floormats.iron_floormat_block"   : "Iron Floor Mat",
     "block.floormats.jungle_floormat_block" : "Jungle Floor Mat",
     "block.floormats.oak_floormat_block"    : "Oak Floor Mat",
     "block.floormats.spruce_floormat_block" : "Spruce Floor Mat",
+
+    "block.floormats.gilded.gilded_acacia_floormat_block"   : "Gilded Acacia Floor Mat",
+    "block.floormats.gilded.gilded_birch_floormat_block"    : "Gilded Birch Floor Mat",
+    "block.floormats.gilded.gilded_darkoak_floormat_block"  : "Gilded Dark Oak Floor Mat",
+    "block.floormats.gilded.gilded_jungle_floormat_block"   : "Gilded Jungle Floor Mat",
+    "block.floormats.gilded.gilded_oak_floormat_block"      : "Gilded Oak Floor Mat",
+    "block.floormats.gilded.gilded_spruce_floormat_block"   : "Gilded Spruce Floor Mat",
+
+    "block.floormats.gold_floormat_block"   : "Gold Floor Mat",
+    "block.floormats.iron_floormat_block"   : "Iron Floor Mat",
     "block.floormats.stone_floormat_block"  : "Stone Floor Mat",
 
     "command.floormats"                     : "§nWelcome to Floor Mats by D0CTOR ZED!§r\n\nTo get a list of help topics, type §a/floormats help§r.\nFor help with those topics, type §a/floormats help [topic]§r.",

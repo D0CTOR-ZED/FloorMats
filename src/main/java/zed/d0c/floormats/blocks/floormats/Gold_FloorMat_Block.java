@@ -18,10 +18,14 @@ public class Gold_FloorMat_Block extends AbstractFloorMatBlock {
     public Gold_FloorMat_Block() {
         super(Sensitivity.PLAYERS,
                 Properties.create(Material.IRON, MaterialColor.GOLD)
-                        .hardnessAndResistance(0.5f)
+                        .hardnessAndResistance(1.0f)
                         .harvestLevel(0)
                         .harvestTool(ToolType.PICKAXE)
         );
+    }
+
+    public Gold_FloorMat_Block(Sensitivity sensitivity, Properties properties) {
+        super(sensitivity,properties);
     }
 
     @Override
