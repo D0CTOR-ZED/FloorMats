@@ -15,18 +15,25 @@ apply plugin: 'maven-publish'
 
 repositories {
     maven { // JEI
-        url "https://dvs1.progwml6.com/files/maven/"
+        name = 'Progwm16 maven'
+        url = 'https://dvs1.progwml6.com/files/maven/'
+    }
+    maven { // JEI mirror
+        name = 'ModMaven'
+        url = 'https://modmaven.k-4u.nl/'
     }
     maven { // TOP
-        name 'tterrag maven'
-        url "http://maven.tterrag.com/"
+        name = 'tterrag maven'
+        url = 'http://maven.tterrag.com/'
     }
 }
 
 version = "${minecraft_version}-${mod_version}"
 group = "${group_prefix}.${mod_name}"
+//noinspection GroovyUnusedAssignment
 archivesBaseName = "${mod_name}"
 
+//noinspection GroovyUnusedAssignment
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
@@ -86,6 +93,7 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
+            //noinspection GroovyAssignabilityCheck
             args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
 
             mods {
@@ -128,11 +136,6 @@ dependencies {
         transitive = false
     })
 
-
-    // compile against the JEI API but do not include it at runtime
-//    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    // at runtime, use the full JEI jar
-//    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
     // Compile against the Hwyla API, but do not include it at runtime
 //    compileOnly fg.deobf("mcp.mobius.waila:Hwyla:1.16.2-1.9.23-79:api")
     // At runtime, use the full Hwyla jar
