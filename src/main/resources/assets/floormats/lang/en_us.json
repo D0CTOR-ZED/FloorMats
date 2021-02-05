@@ -14,6 +14,9 @@
     "block.floormats.gilded.gilded_oak_floormat_block"      : "Gilded Oak Floor Mat",
     "block.floormats.gilded.gilded_spruce_floormat_block"   : "Gilded Spruce Floor Mat",
 
+    "block.floormats.immersive.treated_wood_floormat_block"         : "Treated Wood Floor Mat",
+    "block.floormats.immersive.gilded_treated_wood_floormat_block"  : "Gilded Treated Wood Floor Mat",
+
     "block.floormats.gold_floormat_block"   : "Gold Floor Mat",
     "block.floormats.iron_floormat_block"   : "Iron Floor Mat",
     "block.floormats.stone_floormat_block"  : "Stone Floor Mat",

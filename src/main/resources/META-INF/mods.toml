@@ -47,9 +47,10 @@ Floor Mats is a simple mod adding multiblock pressure plates.
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 # Here's another dependency
+
 [[dependencies.floormats]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.16.3,1.17)"
-    ordering="NONE"
+    modId="immersiveengineering"
+    mandatory=false
+    versionRange="[4.0.1,)"
+    ordering="AFTER"
     side="BOTH"

@@ -5,9 +5,9 @@ import net.minecraft.block.material.Material;
 import net.minecraftforge.common.ToolType;
 import zed.d0c.floormats.blocks.AbstractFloorMatBlock;
 
-public class Jungle_FloorMat_Block extends AbstractFloorMatBlock {
+public class Wooden_FloorMat_Block extends AbstractFloorMatBlock {
 
-    public Jungle_FloorMat_Block() {
+    public Wooden_FloorMat_Block() {
         super(  Sensitivity.EVERYTHING,
                 Properties.create(Material.WOOD)
                         .sound(SoundType.WOOD)

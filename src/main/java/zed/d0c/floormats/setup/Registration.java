@@ -32,22 +32,22 @@ public class Registration {
 
     // Wooden Floor Mats
 
-    public static final RegistryObject<Oak_FloorMat_Block> OAK_FLOORMAT_BLOCK = BLOCKS.register("oak_floormat_block", Oak_FloorMat_Block::new);
+    public static final RegistryObject<Wooden_FloorMat_Block> OAK_FLOORMAT_BLOCK = BLOCKS.register("oak_floormat_block", Wooden_FloorMat_Block::new);
     public static final RegistryObject<Item> OAK_FLOORMAT_ITEM = ITEMS.register("oak_floormat_item", () -> new BlockItem(OAK_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
 
-    public static final RegistryObject<Spruce_FloorMat_Block> SPRUCE_FLOORMAT_BLOCK = BLOCKS.register("spruce_floormat_block", Spruce_FloorMat_Block::new);
+    public static final RegistryObject<Wooden_FloorMat_Block> SPRUCE_FLOORMAT_BLOCK = BLOCKS.register("spruce_floormat_block", Wooden_FloorMat_Block::new);
     public static final RegistryObject<Item> SPRUCE_FLOORMAT_ITEM = ITEMS.register("spruce_floormat_item", () -> new BlockItem(SPRUCE_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
 
-    public static final RegistryObject<Birch_FloorMat_Block> BIRCH_FLOORMAT_BLOCK = BLOCKS.register("birch_floormat_block", Birch_FloorMat_Block::new);
+    public static final RegistryObject<Wooden_FloorMat_Block> BIRCH_FLOORMAT_BLOCK = BLOCKS.register("birch_floormat_block", Wooden_FloorMat_Block::new);
     public static final RegistryObject<Item> BIRCH_FLOORMAT_ITEM = ITEMS.register("birch_floormat_item", () -> new BlockItem(BIRCH_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
 
-    public static final RegistryObject<Jungle_FloorMat_Block> JUNGLE_FLOORMAT_BLOCK = BLOCKS.register("jungle_floormat_block", Jungle_FloorMat_Block::new);
+    public static final RegistryObject<Wooden_FloorMat_Block> JUNGLE_FLOORMAT_BLOCK = BLOCKS.register("jungle_floormat_block", Wooden_FloorMat_Block::new);
     public static final RegistryObject<Item> JUNGLE_FLOORMAT_ITEM = ITEMS.register("jungle_floormat_item", () -> new BlockItem(JUNGLE_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
 
-    public static final RegistryObject<DarkOak_FloorMat_Block> DARKOAK_FLOORMAT_BLOCK = BLOCKS.register("darkoak_floormat_block", DarkOak_FloorMat_Block::new);
+    public static final RegistryObject<Wooden_FloorMat_Block> DARKOAK_FLOORMAT_BLOCK = BLOCKS.register("darkoak_floormat_block", Wooden_FloorMat_Block::new);
     public static final RegistryObject<Item> DARKOAK_FLOORMAT_ITEM = ITEMS.register("darkoak_floormat_item", () -> new BlockItem(DARKOAK_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
 
-    public static final RegistryObject<Acacia_FloorMat_Block> ACACIA_FLOORMAT_BLOCK = BLOCKS.register("acacia_floormat_block", Acacia_FloorMat_Block::new);
+    public static final RegistryObject<Wooden_FloorMat_Block> ACACIA_FLOORMAT_BLOCK = BLOCKS.register("acacia_floormat_block", Wooden_FloorMat_Block::new);
     public static final RegistryObject<Item> ACACIA_FLOORMAT_ITEM = ITEMS.register("acacia_floormat_item", () -> new BlockItem(ACACIA_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
 
     // Gilded Floor Mats
@@ -80,5 +80,13 @@ public class Registration {
 
     public static final RegistryObject<Gold_FloorMat_Block> GOLD_FLOORMAT_BLOCK = BLOCKS.register("gold_floormat_block", Gold_FloorMat_Block::new);
     public static final RegistryObject<Item> GOLD_FLOORMAT_ITEM = ITEMS.register("gold_floormat_item", () -> new BlockItem(GOLD_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
+
+    // Immersive Floor Mats
+
+    public static final RegistryObject<Wooden_FloorMat_Block> TREATED_WOOD_FLOORMAT_BLOCK = BLOCKS.register("immersive/treated_wood_floormat_block", Wooden_FloorMat_Block::new);
+    public static final RegistryObject<Item> TREATED_WOOD_FLOORMAT_ITEM = ITEMS.register("immersive/treated_wood_floormat_item", () -> new BlockItem(TREATED_WOOD_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
+
+    public static final RegistryObject<Gilded_Wood_FloorMat_Block> GILDED_TREATED_WOOD_FLOORMAT_BLOCK = BLOCKS.register("immersive/gilded_treated_wood_floormat_block", Gilded_Wood_FloorMat_Block::new);
+    public static final RegistryObject<Item> GILDED_TREATED_WOOD_FLOORMAT_ITEM = ITEMS.register("immersive/gilded_treated_wood_floormat_item", () -> new BlockItem(GILDED_TREATED_WOOD_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
 
 }

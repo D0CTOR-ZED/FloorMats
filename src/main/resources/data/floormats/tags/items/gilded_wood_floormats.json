@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "optional": [
+    "floormats:immersive/gilded_treated_wood_floormat_item"
+  ],
+  "values": [
+    "floormats:gilded/gilded_acacia_floormat_item",
+    "floormats:gilded/gilded_birch_floormat_item",
+    "floormats:gilded/gilded_darkoak_floormat_item",
+    "floormats:gilded/gilded_jungle_floormat_item",
+    "floormats:gilded/gilded_oak_floormat_item",
+    "floormats:gilded/gilded_spruce_floormat_item"
+  ]
+}

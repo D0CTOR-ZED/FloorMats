@@ -17,6 +17,9 @@
     "block.floormats.gilded.gilded_oak_floormat_block"    : "ʇɐW ɹoolℲ ʞɐO pǝplᴉפ",
     "block.floormats.gilded.gilded_spruce_floormat_block" : "ʇɐW ɹoolℲ ǝɔnɹdS pǝplᴉפ",
 
+    "block.floormats.immersive.treated_wood_floormat_block"         : "ʇɐW ɹoolℲ pooM pǝʇɐǝɹ┴",
+    "block.floormats.immersive.gilded_treated_wood_floormat_block"  : "ʇɐW ɹoolℲ pooM pǝʇɐǝɹ┴ pǝplᴉפ",
+
     "block.floormats.gold_floormat_block"   : "ʇɐW ɹoolℲ ploפ",
     "block.floormats.iron_floormat_block"   : "ʇɐW ɹoolℲ uoɹI",
     "block.floormats.stone_floormat_block"  : "ʇɐW ɹoolℲ ǝuoʇS",
