@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "immersiveengineering:shaped_fluid",
   "group": "immersive_floormat",
   "pattern": [
     "ggg",
@@ -11,7 +11,9 @@
       "tag": "floormats:gilded_wood_floormats"
     },
     "c": {
-      "item": "immersiveengineering:creosote_bucket"
+      "tag": "forge:creosote",
+      "amount": 1000,
+      "type": "immersiveengineering:fluid"
     }
   },
   "result": {
@@ -19,8 +21,6 @@
     "item": "floormats:immersive/gilded_treated_wood_floormat_item"
   },
   "conditions": [
-    {
-      "type": "forge:mod_loaded", "modid": "immersiveengineering"
-    }
+    { "type": "forge:mod_loaded", "modid": "immersiveengineering" }
   ]
 }

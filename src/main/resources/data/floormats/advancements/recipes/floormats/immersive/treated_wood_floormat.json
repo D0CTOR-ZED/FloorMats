@@ -1,18 +1,14 @@
 {
   "parent": "minecraft:recipes/root",
   "rewards": {
-    "recipes": [
-      "floormats:floormats/immersive/treated_wood_floormat_block"
-    ]
+    "recipes": [ "floormats:floormats/immersive/treated_wood_floormat_block" ]
   },
   "criteria": {
     "has_creosote": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
-          {
-            "tag": "forge:creosote"
-          }
+          { "tag": "forge:creosote" }
         ]
       }
     },
@@ -24,8 +20,7 @@
     }
   },
   "requirements": [
-    [
-      "has_creosote",
+    [ "has_creosote",
       "has_the_recipe"
     ]
   ]

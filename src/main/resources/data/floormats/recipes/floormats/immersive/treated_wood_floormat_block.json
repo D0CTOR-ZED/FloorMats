@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "immersiveengineering:shaped_fluid",
   "group": "immersive_floormat",
   "pattern": [
     "fff",
@@ -11,7 +11,9 @@
       "tag": "floormats:wooden_floormats"
     },
     "c": {
-      "item": "immersiveengineering:creosote_bucket"
+      "tag": "forge:creosote",
+      "amount": 1000,
+      "type": "immersiveengineering:fluid"
     }
   },
   "result": {
