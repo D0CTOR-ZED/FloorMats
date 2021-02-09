@@ -9,6 +9,8 @@
     "floormats:gilded/gilded_darkoak_floormat_item",
     "floormats:gilded/gilded_jungle_floormat_item",
     "floormats:gilded/gilded_oak_floormat_item",
-    "floormats:gilded/gilded_spruce_floormat_item"
+    "floormats:gilded/gilded_spruce_floormat_item",
+    "floormats:nether/crimson_stem/crimson_stem_floormat_item",
+    "floormats:nether/warped_stem/warped_stem_floormat_item"
   ]
 }

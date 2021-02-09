@@ -12,6 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import zed.d0c.floormats.FloorMats;
 import zed.d0c.floormats.blocks.floormats.*;
 
+@SuppressWarnings({"SpellCheckingInspection", "unused"})
 public class Registration {
 
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, FloorMats.MODID);
@@ -88,5 +89,19 @@ public class Registration {
 
     public static final RegistryObject<Gilded_Wood_FloorMat_Block> GILDED_TREATED_WOOD_FLOORMAT_BLOCK = BLOCKS.register("immersive/gilded_treated_wood_floormat_block", Gilded_Wood_FloorMat_Block::new);
     public static final RegistryObject<Item> GILDED_TREATED_WOOD_FLOORMAT_ITEM = ITEMS.register("immersive/gilded_treated_wood_floormat_item", () -> new BlockItem(GILDED_TREATED_WOOD_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
+
+    // Nether Floor Mats
+
+    public static final RegistryObject<Wooden_FloorMat_Block> CRIMSON_STEM_FLOORMAT_BLOCK = BLOCKS.register("nether/crimson_stem/crimson_stem_floormat_block", Wooden_FloorMat_Block::new);
+    public static final RegistryObject<Item> CRIMSON_STEM_FLOORMAT_ITEM = ITEMS.register("nether/crimson_stem/crimson_stem_floormat_item", () -> new BlockItem(CRIMSON_STEM_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
+
+    public static final RegistryObject<Gilded_Wood_FloorMat_Block> GILDED_CRIMSON_STEM_FLOORMAT_BLOCK = BLOCKS.register("nether/crimson_stem/gilded_crimson_stem_floormat_block", Gilded_Wood_FloorMat_Block::new);
+    public static final RegistryObject<Item> GILDED_CRIMSON_STEM_FLOORMAT_ITEM = ITEMS.register("nether/crimson_stem/gilded_crimson_stem_floormat_item", () -> new BlockItem(GILDED_CRIMSON_STEM_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
+
+    public static final RegistryObject<Wooden_FloorMat_Block> WARPED_STEM_FLOORMAT_BLOCK = BLOCKS.register("nether/warped_stem/warped_stem_floormat_block", Wooden_FloorMat_Block::new);
+    public static final RegistryObject<Item> WARPED_STEM_FLOORMAT_ITEM = ITEMS.register("nether/warped_stem/warped_stem_floormat_item", () -> new BlockItem(WARPED_STEM_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
+
+    public static final RegistryObject<Gilded_Wood_FloorMat_Block> GILDED_WARPED_STEM_FLOORMAT_BLOCK = BLOCKS.register("nether/warped_stem/gilded_warped_stem_floormat_block", Gilded_Wood_FloorMat_Block::new);
+    public static final RegistryObject<Item> GILDED_WARPED_STEM_FLOORMAT_ITEM = ITEMS.register("nether/warped_stem/gilded_warped_stem_floormat_item", () -> new BlockItem(GILDED_WARPED_STEM_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
 
 }

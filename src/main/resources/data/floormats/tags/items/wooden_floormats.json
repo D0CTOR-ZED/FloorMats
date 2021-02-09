@@ -9,6 +9,8 @@
     "floormats:darkoak_floormat_item",
     "floormats:jungle_floormat_item",
     "floormats:oak_floormat_item",
-    "floormats:spruce_floormat_item"
+    "floormats:spruce_floormat_item",
+    "floormats:nether/crimson_stem/crimson_stem_floormat_item",
+    "floormats:nether/warped_stem/warped_stem_floormat_item"
   ]
 }

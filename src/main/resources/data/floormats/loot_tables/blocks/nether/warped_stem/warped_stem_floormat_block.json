@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "warped_stem_floormat_block",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "floormats:nether/warped_stem/warped_stem_floormat_item"
+        }
+      ]
+    }
+  ]
+}

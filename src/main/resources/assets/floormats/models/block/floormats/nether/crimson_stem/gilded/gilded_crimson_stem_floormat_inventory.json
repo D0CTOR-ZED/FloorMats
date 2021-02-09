@@ -1,0 +1,7 @@
+{
+  "parent": "floormats:block/floormats/floormat_inventory",
+  "textures": {
+    "top": "floormats:block/floormats/nether/gilded_crimson_stem/gilded_crimson_stem_floormatblock_connect_0",
+    "side": "floormats:block/floormats/nether/gilded_crimson_stem/gilded_crimson_stem_floormatblock_connect_0"
+  }
+}
