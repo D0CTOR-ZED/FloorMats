@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "optional": [
+    "floormats:immersive/treated_wood_floormat_item"
+  ],
+  "values": [
+    "floormats:acacia_floormat_item",
+    "floormats:birch_floormat_item",
+    "floormats:darkoak_floormat_item",
+    "floormats:jungle_floormat_item",
+    "floormats:oak_floormat_item",
+    "floormats:spruce_floormat_item"
+  ]
+}

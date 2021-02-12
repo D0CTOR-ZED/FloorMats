@@ -11,7 +11,7 @@ public class Stone_FloorMat_Block extends AbstractFloorMatBlock {
         super(  Sensitivity.MOBS,
                 Properties.create(Material.ROCK)
                         .sound(SoundType.WOOD)
-                        .hardnessAndResistance(0.5f)
+                        .hardnessAndResistance(1.0f)
                         .lightValue(0)
                         .harvestLevel(0)
                         .harvestTool(ToolType.PICKAXE)

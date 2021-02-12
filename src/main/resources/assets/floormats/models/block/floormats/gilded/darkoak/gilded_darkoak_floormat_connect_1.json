@@ -1,0 +1,8 @@
+{
+  "parent": "floormats:block/floormats/floormat_base",
+  "textures": {
+    "top":    "floormats:block/floormats/gilded/darkoak/gilded_darkoak_floormatblock_connect_1",
+    "bottom": "floormats:block/floormats/gilded/darkoak/gilded_darkoak_floormatblock_connect_1",
+    "side":   "floormats:block/floormats/gilded/darkoak/gilded_darkoak_floormatblock_connect_0"
+  }
+}

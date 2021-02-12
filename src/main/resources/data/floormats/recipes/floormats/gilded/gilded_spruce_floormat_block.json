@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "gilded_wood_floormat",
+  "pattern": [
+    "xrx",
+    " g "
+  ],
+  "key": {
+    "x": {
+      "tag": "minecraft:spruce_logs"
+    },
+    "r": {
+      "tag": "forge:dusts/redstone"
+    },
+    "g": {
+      "tag": "forge:storage_blocks/gold"
+    }
+  },
+  "result": {
+    "count": 2,
+    "item": "floormats:gilded/gilded_spruce_floormat_item"
+  }
+}

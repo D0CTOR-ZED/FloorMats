@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "gilded_darkoak_floormat_block",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "floormats:gilded/gilded_darkoak_floormat_item"
+        }
+      ]
+    }
+  ]
+}

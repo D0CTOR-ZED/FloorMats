@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "immersive_floormat",
+  "pattern": [
+    "ggg",
+    "gcg",
+    "ggg"
+  ],
+  "key": {
+    "g": {
+      "tag": "floormats:gilded_wood_floormats"
+    },
+    "c": {
+      "tag": "forge:creosote"
+    }
+  },
+  "result": {
+    "count": 8,
+    "item": "floormats:immersive/gilded_treated_wood_floormat_item"
+  },
+  "conditions": [
+    { "type": "forge:mod_loaded", "modid": "immersiveengineering" }
+  ]
+}

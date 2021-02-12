@@ -11,7 +11,7 @@ public class Iron_FloorMat_Block extends AbstractFloorMatBlock {
         super(  Sensitivity.PLAYERS,
                 Properties.create(Material.IRON)
                         .sound(SoundType.WOOD)
-                        .hardnessAndResistance(0.5f)
+                        .hardnessAndResistance(1.0f)
                         .lightValue(0)
                         .harvestLevel(0)
                         .harvestTool(ToolType.PICKAXE)

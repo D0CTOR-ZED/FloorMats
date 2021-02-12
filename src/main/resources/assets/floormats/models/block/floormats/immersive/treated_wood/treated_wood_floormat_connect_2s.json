@@ -1,0 +1,8 @@
+{
+  "parent": "floormats:block/floormats/floormat_base",
+  "textures": {
+    "top":    "floormats:block/floormats/immersive/treated_wood/treated_wood_floormatblock_connect_2s",
+    "bottom": "floormats:block/floormats/immersive/treated_wood/treated_wood_floormatblock_connect_2s",
+    "side":   "floormats:block/floormats/immersive/treated_wood/treated_wood_floormatblock_connect_0"
+  }
+}
