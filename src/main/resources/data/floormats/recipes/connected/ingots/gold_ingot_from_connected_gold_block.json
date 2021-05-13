@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "gold_ingot",
+  "ingredients": [
+    {
+      "tag": "forge:storage_blocks/gold"
+    }
+  ],
+  "result": {
+    "item": "minecraft:gold_ingot",
+    "count": 9
+  }
+}

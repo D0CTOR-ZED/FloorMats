@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "connected_acacia_log",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "floormats:connected/wooden/connected_acacia_log"
+        }
+      ]
+    }
+  ]
+}

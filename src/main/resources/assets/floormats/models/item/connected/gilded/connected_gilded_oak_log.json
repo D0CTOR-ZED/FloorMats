@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all":    "floormats:block/floormats/gilded/oak/gilded_oak_floormatblock_connect_0"
+  }
+}

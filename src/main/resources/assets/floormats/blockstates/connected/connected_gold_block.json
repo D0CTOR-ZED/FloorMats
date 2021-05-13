@@ -1,0 +1,267 @@
+{
+  "variants": {
+    "up=false,down=false,north=false,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_0"
+    },
+    "up=false,down=false,north=true,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_1a",
+      "y": 0
+    },
+    "up=false,down=false,north=false,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_1b",
+      "y": 90
+    },
+    "up=false,down=false,north=false,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_1a",
+      "y": 180
+    },
+    "up=false,down=false,north=false,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_1b",
+      "y": 270
+    },
+    "up=false,down=false,north=false,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_2a",
+      "y": 0
+    },
+    "up=false,down=false,north=false,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_2b",
+      "y": 90
+    },
+    "up=false,down=false,north=true,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_2a",
+      "y": 180
+    },
+    "up=false,down=false,north=true,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_2b",
+      "y": 270
+    },
+    "up=false,down=false,north=false,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_2sa",
+      "y": 0
+    },
+    "up=false,down=false,north=true,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_2sb",
+      "y": 90
+    },
+    "up=false,down=false,north=false,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_3a",
+      "y": 0
+    },
+    "up=false,down=false,north=true,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_3b",
+      "y": 90
+    },
+    "up=false,down=false,north=true,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_3a",
+      "y": 180
+    },
+    "up=false,down=false,north=true,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_3b",
+      "y": 270
+    },
+    "up=false,down=false,north=true,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_6"
+    },
+
+    "up=false,down=true,north=false,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_1u",
+      "x": 180
+    },
+    "up=false,down=true,north=true,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_2d",
+      "x": 180,
+      "y": 180
+    },
+    "up=false,down=true,north=false,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_2e",
+      "x": 180,
+      "y": 270
+    },
+    "up=false,down=true,north=false,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_2d",
+      "x": 180,
+      "y":   0
+    },
+    "up=false,down=true,north=false,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_2e",
+      "x": 180,
+      "y":  90
+    },
+    "up=false,down=true,north=false,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_3d",
+      "y": 0
+    },
+    "up=false,down=true,north=false,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_3e",
+      "y": 90
+    },
+    "up=false,down=true,north=true,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_3d",
+      "y": 180
+    },
+    "up=false,down=true,north=true,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_3e",
+      "y": 270
+    },
+    "up=false,down=true,north=false,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_3sa",
+      "y": 0
+    },
+    "up=false,down=true,north=true,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_3sb",
+      "y": 90
+    },
+    "up=false,down=true,north=false,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_4d",
+      "y": 0
+    },
+    "up=false,down=true,north=true,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_4e",
+      "y": 90
+    },
+    "up=false,down=true,north=true,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_4d",
+      "y": 180
+    },
+    "up=false,down=true,north=true,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_4e",
+      "y": 270
+    },
+    "up=false,down=true,north=true,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_6"
+    },
+
+    "up=true,down=false,north=false,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_1u",
+      "x": 0
+    },
+    "up=true,down=false,north=true,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_2d",
+      "y": 0
+    },
+    "up=true,down=false,north=false,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_2e",
+      "y":  90
+    },
+    "up=true,down=false,north=false,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_2d",
+      "y": 180
+    },
+    "up=true,down=false,north=false,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_2e",
+      "y": 270
+    },
+    "up=true,down=false,north=false,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_3e",
+      "x": 180,
+      "y": 90
+    },
+    "up=true,down=false,north=false,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_3d",
+      "x": 180,
+      "y": 180
+    },
+    "up=true,down=false,north=true,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_3e",
+      "x": 180,
+      "y": 270
+    },
+    "up=true,down=false,north=true,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_3d",
+      "x": 180,
+      "y": 0
+    },
+    "up=true,down=false,north=false,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_3sa",
+      "x": 180,
+      "y": 0
+    },
+    "up=true,down=false,north=true,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_3sb",
+      "x": 180,
+      "y": 90
+    },
+    "up=true,down=false,north=false,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_4d",
+      "x": 180,
+      "y": 180
+    },
+    "up=true,down=false,north=true,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_4e",
+      "x": 180,
+      "y": 270
+    },
+    "up=true,down=false,north=true,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_4d",
+      "x": 180,
+      "y": 0
+    },
+    "up=true,down=false,north=true,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_4e",
+      "x": 180,
+      "y": 90
+    },
+    "up=true,down=false,north=true,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_6"
+    },
+
+    "up=true,down=true,north=false,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_2su",
+      "x": 0,
+      "y": 0
+    },
+    "up=true,down=true,north=true,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_3n",
+      "y": 0
+    },
+    "up=true,down=true,north=false,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_3o",
+      "y": 90
+    },
+    "up=true,down=true,north=false,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_3n",
+      "y": 180
+    },
+    "up=true,down=true,north=false,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_3o",
+      "y": 270
+    },
+    "up=true,down=true,north=false,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_4g",
+      "y": 0
+    },
+    "up=true,down=true,north=false,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_4h",
+      "y": 90
+    },
+    "up=true,down=true,north=true,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_4g",
+      "y": 180
+    },
+    "up=true,down=true,north=true,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_4h",
+      "y": 270
+    },
+    "up=true,down=true,north=false,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_6"
+    },
+    "up=true,down=true,north=true,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_6"
+    },
+    "up=true,down=true,north=false,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_6"
+    },
+    "up=true,down=true,north=true,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_6"
+    },
+    "up=true,down=true,north=true,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_6"
+    },
+    "up=true,down=true,north=true,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/gold/gold_connect_6"
+    },
+    "up=true,down=true,north=true,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/gold/gold_connect_6"
+    }
+  }
+}

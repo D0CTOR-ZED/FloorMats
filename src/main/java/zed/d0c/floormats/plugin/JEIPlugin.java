@@ -13,6 +13,8 @@ import java.util.Collections;
 
 import static zed.d0c.floormats.setup.Registration.GILDED_TREATED_WOOD_FLOORMAT_ITEM;
 import static zed.d0c.floormats.setup.Registration.TREATED_WOOD_FLOORMAT_ITEM;
+import static zed.d0c.floormats.setup.Registration.TREATED_WOOD_CONNECTED_ITEM;
+import static zed.d0c.floormats.setup.Registration.GILDED_TREATED_WOOD_CONNECTED_ITEM;
 
 @mezz.jei.api.JeiPlugin
 public class JEIPlugin implements IModPlugin {
@@ -36,6 +38,8 @@ public class JEIPlugin implements IModPlugin {
             IIngredientManager manager = jeiRuntime.getIngredientManager();
             manager.removeIngredientsAtRuntime(VanillaTypes.ITEM, Collections.singleton(TREATED_WOOD_FLOORMAT_ITEM.get().getDefaultInstance()));
             manager.removeIngredientsAtRuntime(VanillaTypes.ITEM, Collections.singleton(GILDED_TREATED_WOOD_FLOORMAT_ITEM.get().getDefaultInstance()));
+            manager.removeIngredientsAtRuntime(VanillaTypes.ITEM, Collections.singleton(TREATED_WOOD_CONNECTED_ITEM.get().getDefaultInstance()));
+            manager.removeIngredientsAtRuntime(VanillaTypes.ITEM, Collections.singleton(GILDED_TREATED_WOOD_CONNECTED_ITEM.get().getDefaultInstance()));
         }
     }
 

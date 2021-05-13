@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "connected_crimson_stem",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "floormats:connected/nether/connected_crimson_stem"
+        }
+      ]
+    }
+  ]
+}

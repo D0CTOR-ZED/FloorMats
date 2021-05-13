@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "gilded_wood_floormat",
+  "pattern": [
+    "xsx",
+    "ggg"
+  ],
+  "key": {
+    "x": {
+      "tag": "minecraft:acacia_logs"
+    },
+    "c": {
+      "tag": "floormats:connectors"
+    },
+    "g": {
+      "tag": "floormats:gilding"
+    }
+  },
+  "result": {
+    "count": 2,
+    "item": "floormats:connected/gilded/connected_gilded_acacia_log"
+  }
+}

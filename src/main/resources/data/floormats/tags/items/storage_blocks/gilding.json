@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "optional": [
+    "#forge:storage_blocks/electrum",
+    "#forge:storage_blocks/gold",
+    "immersiveengineering:storage_electrum",
+    "spareparts:corinthian/corinthian_block"
+  ],
+  "values": [
+    "minecraft:gold_block"
+  ]
+}

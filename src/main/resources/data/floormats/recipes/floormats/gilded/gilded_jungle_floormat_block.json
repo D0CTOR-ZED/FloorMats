@@ -3,7 +3,7 @@
   "group": "gilded_wood_floormat",
   "pattern": [
     "xrx",
-    " g "
+    "ggg"
   ],
   "key": {
     "x": {
@@ -13,7 +13,7 @@
       "tag": "forge:dusts/redstone"
     },
     "g": {
-      "tag": "forge:storage_blocks/gold"
+      "tag": "floormats:gilding"
     }
   },
   "result": {

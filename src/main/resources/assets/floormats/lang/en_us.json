@@ -1,5 +1,8 @@
 {
 
+
+
+
     "block.floormats.acacia_floormat_block" : "Acacia Floor Mat",
     "block.floormats.birch_floormat_block"  : "Birch Floor Mat",
     "block.floormats.darkoak_floormat_block": "Dark Oak Floor Mat",
@@ -25,6 +28,32 @@
     "block.floormats.gold_floormat_block"   : "Gold Floor Mat",
     "block.floormats.iron_floormat_block"   : "Iron Floor Mat",
     "block.floormats.stone_floormat_block"  : "Stone Floor Mat",
+
+    "block.floormats.connected.wooden.connected_acacia_log"  : "Connected Acacia Log",
+    "block.floormats.connected.wooden.connected_birch_log"   : "Connected Birch Log",
+    "block.floormats.connected.wooden.connected_darkoak_log" : "Connected Dark Oak Log",
+    "block.floormats.connected.wooden.connected_jungle_log"  : "Connected Jungle Log",
+    "block.floormats.connected.wooden.connected_oak_log"     : "Connected Oak Log",
+    "block.floormats.connected.wooden.connected_spruce_log"  : "Connected Spruce Log",
+
+    "block.floormats.connected.gilded.connected_gilded_acacia_log"  : "Connected Gilded Acacia Log",
+    "block.floormats.connected.gilded.connected_gilded_birch_log"   : "Connected Gilded Birch Log",
+    "block.floormats.connected.gilded.connected_gilded_darkoak_log" : "Connected Gilded Dark Oak Log",
+    "block.floormats.connected.gilded.connected_gilded_jungle_log"  : "Connected Gilded Jungle Log",
+    "block.floormats.connected.gilded.connected_gilded_oak_log"     : "Connected Gilded Oak Log",
+    "block.floormats.connected.gilded.connected_gilded_spruce_log"  : "Connected Gilded Spruce Log",
+
+    "block.floormats.connected.immersive.connected_treated_wood"        : "Connected Treated Wood",
+    "block.floormats.connected.immersive.connected_gilded_treated_wood" : "Connected Gilded Treated Wood",
+
+    "block.floormats.connected.nether.connected_crimson_stem"       : "Connected Crimson Stem",
+    "block.floormats.connected.nether.connected_gilded_crimson_stem": "Connected Gilded Crimson Stem",
+    "block.floormats.connected.nether.connected_warped_stem"         : "Connected Warped Stem",
+    "block.floormats.connected.nether.connected_gilded_warped_stem"  : "Connected Gilded Warped Stem",
+
+    "block.floormats.connected.connected_gold_block" : "Connected Block of Gold",
+    "block.floormats.connected.connected_iron_block" : "Connected Block of Iron",
+    "block.floormats.connected.connected_stone"      : "Connected Stone",
 
     "command.floormats"                     : "§nWelcome to Floor Mats by D0CTOR ZED!§r\n\nTo get a list of help topics, type §a/floormats help§r.\nFor help with those topics, type §a/floormats help [topic]§r.",
     "command.floormats.help"                : "Help is available for the following topics:\n§aconnections§r, §agold§r, §alinking§r, §apower§r, §atypes§r, §awiki§r.",

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all":    "floormats:block/floormats/immersive/gilded_treated_wood/gilded_treated_wood_floormatblock_connect_4"
+  }
+}

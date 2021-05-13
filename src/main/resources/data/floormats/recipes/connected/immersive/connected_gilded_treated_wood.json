@@ -1,0 +1,26 @@
+{
+  "type": "immersiveengineering:shaped_fluid",
+  "group": "immersive_floormat",
+  "pattern": [
+    "xsx",
+    "ggg"
+  ],
+  "key": {
+    "x": {
+      "tag": "immersiveengineering:treated_wood"
+    },
+    "c": {
+      "tag": "floormats:connectors"
+    },
+    "g": {
+      "tag": "floormats:gilding"
+    }
+  },
+  "result": {
+    "count": 2,
+    "item": "floormats:connected/immersive/connected_gilded_treated_wood"
+  },
+  "conditions": [
+    { "type": "forge:mod_loaded", "modid": "immersiveengineering" }
+  ]
+}

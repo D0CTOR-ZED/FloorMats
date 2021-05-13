@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "floormats:connected/connected_stone",
+    "floormats:connected/immersive/connected_treated_wood"
+  ]
+}

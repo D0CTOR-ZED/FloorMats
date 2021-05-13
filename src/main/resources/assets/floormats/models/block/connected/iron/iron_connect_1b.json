@@ -1,0 +1,25 @@
+{
+  "parent": "floormats:block/connected/connected_base",
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "down":  { "texture": "#bottom", "cullface": "down",  "rotation": 180 },
+        "up":    { "texture": "#top",    "cullface": "up",    "rotation":   0 },
+        "north": { "texture": "#north",  "cullface": "north", "rotation":   0 },
+        "south": { "texture": "#south",  "cullface": "south", "rotation":   0 },
+        "west":  { "texture": "#west",   "cullface": "west",  "rotation": 270 },
+        "east":  { "texture": "#east",   "cullface": "east",  "rotation":  90 }
+      }
+    }
+  ],
+  "textures": {
+    "bottom": "floormats:block/floormats/iron/iron_floormatblock_connect_1b",
+    "top":    "floormats:block/floormats/iron/iron_floormatblock_connect_1b",
+    "north":  "floormats:block/floormats/iron/iron_floormatblock_connect_4",
+    "south":  "floormats:block/floormats/iron/iron_floormatblock_connect_0",
+    "west":   "floormats:block/floormats/iron/iron_floormatblock_connect_1b",
+    "east":   "floormats:block/floormats/iron/iron_floormatblock_connect_1b"
+  }
+}

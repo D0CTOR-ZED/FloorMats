@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "connected_treated_wood",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "floormats:connected/immersive/connected_treated_wood"
+        }
+      ]
+    }
+  ]
+}

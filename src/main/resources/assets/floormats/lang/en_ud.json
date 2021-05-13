@@ -29,6 +29,32 @@
     "block.floormats.iron_floormat_block"   : "ʇɐW ɹoolℲ uoɹI",
     "block.floormats.stone_floormat_block"  : "ʇɐW ɹoolℲ ǝuoʇS",
 
+    "block.floormats.connected.wooden.connected_acacia_log"  : "ƃo˥ ɐᴉɔɐɔ∀ pǝʇɔǝuuoƆ",
+    "block.floormats.connected.wooden.connected_birch_log"   : "ƃo˥ ɥɔɹᴉq pǝʇɔǝuuoƆ",
+    "block.floormats.connected.wooden.connected_darkoak_log" : "ƃo˥ ʞɐO ʞɹɐp pǝʇɔǝuuoƆ",
+    "block.floormats.connected.wooden.connected_jungle_log"  : "ƃo˥ ǝlƃunſ pǝʇɔǝuuoƆ",
+    "block.floormats.connected.wooden.connected_oak_log"     : "ƃo˥ ʞɐO pǝʇɔǝuuoƆ",
+    "block.floormats.connected.wooden.connected_spruce_log"  : "ƃo˥ ǝɔnɹdS pǝʇɔǝuuoƆ",
+
+    "block.floormats.connected.gilded.connected_gilded_acacia_log"  : "ƃo˥ ɐᴉɔɐɔ∀ pǝplᴉפ pǝʇɔǝuuoƆ",
+    "block.floormats.connected.gilded.connected_gilded_birch_log"   : "ƃo˥ ɥɔɹᴉq pǝplᴉפ pǝʇɔǝuuoƆ",
+    "block.floormats.connected.gilded.connected_gilded_darkoak_log" : "ƃo˥ ʞɐO ʞɹɐp pǝplᴉפ pǝʇɔǝuuoƆ",
+    "block.floormats.connected.gilded.connected_gilded_jungle_log"  : "ƃo˥ ǝlƃunſ pǝplᴉפ pǝʇɔǝuuoƆ",
+    "block.floormats.connected.gilded.connected_gilded_oak_log"     : "ƃo˥ ʞɐO pǝplᴉפ pǝʇɔǝuuoƆ",
+    "block.floormats.connected.gilded.connected_gilded_spruce_log"  : "ƃo˥ ǝɔnɹdS pǝplᴉפ pǝʇɔǝuuoƆ",
+
+    "block.floormats.connected.immersive.connected_treated_wood"        : "pooM pǝʇɐǝɹ┴ pǝʇɔǝuuoƆ",
+    "block.floormats.connected.immersive.connected_gilded_treated_wood" : "pooM pǝʇɐǝɹ┴ pǝplᴉפ pǝʇɔǝuuoƆ",
+
+    "block.floormats.connected.nether.connected_crimson_stem"       : "ɯǝʇS uosɯᴉɹƆ pǝʇɔǝuuoƆ",
+    "block.floormats.connected.nether.connected_gilded_crimson_stem": "ɯǝʇS uosɯᴉɹƆ pǝplᴉפ pǝʇɔǝuuoƆ",
+    "block.floormats.connected.nether.connected_warped_stem"         : "ɯǝʇS pǝdɹɐM pǝʇɔǝuuoƆ",
+    "block.floormats.connected.nether.connected_gilded_warped_stem"  : "ɯǝʇS pǝdɹɐM pǝplᴉפ pǝʇɔǝuuoƆ",
+
+    "block.floormats.connected.connected_gold_block" : "ploפ ɟo ʞɔolq pǝʇɔǝuuoƆ",
+    "block.floormats.connected.connected_iron_block" : "uoɹI ɟo ʞɔolq pǝʇɔǝuuoƆ",
+    "block.floormats.connected.connected_stone"      : "ǝuoʇS pǝʇɔǝuuoƆ",
+
     "command.floormats"                     : "˙§a[ɔᴉdoʇ] dlǝɥ sʇɐɯɹoolɟ/§r ǝdʎʇ 'sɔᴉdoʇ ǝsoɥʇ ɥʇᴉʍ dlǝɥ ɹoℲ\n˙§adlǝɥ sʇɐɯɹoolɟ/§r ǝdʎʇ 'sɔᴉdoʇ dlǝɥ ɟo ʇsᴉl ɐ ʇǝƃ o┴\n\n§n¡pƎZ ɹO┴Ɔ0p ʎq sʇɐW ɹoolℲ oʇ ǝɯoɔlǝM§r",
     "command.floormats.help"                : "˙§aᴉʞᴉʍ§r '§asǝdʎʇ§r '§aɹǝʍod§r '§aƃuᴉʞuᴉl§r '§aploƃ§r '§asuoᴉʇɔǝuuoɔ§r\n:sɔᴉdoʇ ƃuᴉʍolloɟ ǝɥʇ ɹoɟ ǝlqɐlᴉɐʌɐ sᴉ dlǝH",
     "command.floormats.help.connections"    : "˙§aslooʇ sʇɐɯɹoolɟ/§r oslɐ ǝǝS  ˙ɹoʇɔǝuuoɔ ɐ ɥʇᴉʍ sʞɔolq ʇɐɯ ɹoolɟ ǝɥʇ ɟo ɥɔɐǝ ƃuᴉʞɔᴉlɔ-ʇɥƃᴉɹ ʎq sʞɔolq ʇɐɯ ɹoolɟ ʇuǝɔɐɾpɐ lɐɔᴉʇuǝpᴉ uǝǝʍʇǝq suoᴉʇɔǝuuoɔ ɯɹoɟǝɹ puɐ ʞɐǝɹq uɐɔ no⅄",

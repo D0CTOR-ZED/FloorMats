@@ -1,8 +1,5 @@
 {
   "replace": false,
-  "optional": [
-    "floormats:immersive/treated_wood_floormat_item"
-  ],
   "values": [
     "floormats:acacia_floormat_item",
     "floormats:birch_floormat_item",
@@ -11,6 +8,7 @@
     "floormats:oak_floormat_item",
     "floormats:spruce_floormat_item",
     "floormats:nether/crimson_stem/crimson_stem_floormat_item",
-    "floormats:nether/warped_stem/warped_stem_floormat_item"
+    "floormats:nether/warped_stem/warped_stem_floormat_item",
+    "floormats:immersive/treated_wood_floormat_item"
   ]
 }

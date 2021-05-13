@@ -1,0 +1,277 @@
+{
+  "variants": {
+    "up=false,down=false,north=false,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_0"
+    },
+    "up=false,down=false,north=true,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_1",
+      "y": 0
+    },
+    "up=false,down=false,north=false,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_1",
+      "y": 90
+    },
+    "up=false,down=false,north=false,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_1",
+      "y": 180
+    },
+    "up=false,down=false,north=false,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_1",
+      "y": 270
+    },
+    "up=false,down=false,north=false,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2a",
+      "y": 180
+    },
+    "up=false,down=false,north=false,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2a",
+      "y": 90
+    },
+    "up=false,down=false,north=true,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2a",
+      "y": 0
+    },
+    "up=false,down=false,north=true,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2a",
+      "y": 270
+    },
+    "up=false,down=false,north=false,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2s",
+      "y": 90
+    },
+    "up=false,down=false,north=true,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2s",
+      "y": 0
+    },
+    "up=false,down=false,north=false,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3",
+      "y": 180
+    },
+    "up=false,down=false,north=true,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3",
+      "y": 270
+    },
+    "up=false,down=false,north=true,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3",
+      "y": 0
+    },
+    "up=false,down=false,north=true,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3",
+      "y": 90
+    },
+    "up=false,down=false,north=true,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_6"
+    },
+
+    "up=false,down=true,north=false,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_1",
+      "x": 90
+    },
+    "up=false,down=true,north=true,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2a",
+      "x": 90,
+      "y": 270
+    },
+    "up=false,down=true,north=false,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2a",
+      "x": 90,
+      "y":  0
+    },
+    "up=false,down=true,north=false,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2a",
+      "x": 90,
+      "y": 90
+    },
+    "up=false,down=true,north=false,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2a",
+      "x": 90,
+      "y": 180
+    },
+    "up=false,down=true,north=false,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3d",
+      "y": 0
+    },
+    "up=false,down=true,north=false,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3d",
+      "y": 270
+    },
+    "up=false,down=true,north=true,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3d",
+      "y": 180
+    },
+    "up=false,down=true,north=true,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3d",
+      "y": 90
+    },
+    "up=false,down=true,north=false,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3",
+      "x": 90,
+      "y": 0
+    },
+    "up=false,down=true,north=true,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3",
+      "x": 90,
+      "y": 90
+    },
+    "up=false,down=true,north=false,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_4d",
+      "x": 0,
+      "y": 0
+    },
+    "up=false,down=true,north=true,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_4d",
+      "x": 0,
+      "y": 90
+    },
+    "up=false,down=true,north=true,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_4d",
+      "x": 0,
+      "y": 180
+    },
+    "up=false,down=true,north=true,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_4d",
+      "x": 0,
+      "y": 270
+    },
+    "up=false,down=true,north=true,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_6"
+    },
+
+    "up=true,down=false,north=false,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_1",
+      "x": 270
+    },
+    "up=true,down=false,north=true,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2a",
+      "x": 270,
+      "y": 270
+    },
+    "up=true,down=false,north=false,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2a",
+      "x": 270,
+      "y":  0
+    },
+    "up=true,down=false,north=false,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2a",
+      "x": 270,
+      "y": 90
+    },
+    "up=true,down=false,north=false,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2a",
+      "x": 270,
+      "y": 180
+    },
+    "up=true,down=false,north=false,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3d",
+      "x": 180,
+      "y": 270
+    },
+    "up=true,down=false,north=false,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3d",
+      "x": 180,
+      "y": 180
+    },
+    "up=true,down=false,north=true,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3d",
+      "x": 180,
+      "y": 90
+    },
+    "up=true,down=false,north=true,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3d",
+      "x": 180,
+      "y": 0
+    },
+    "up=true,down=false,north=false,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3",
+      "x": 270,
+      "y": 0
+    },
+    "up=true,down=false,north=true,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3",
+      "x": 270,
+      "y": 90
+    },
+    "up=true,down=false,north=false,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_4d",
+      "x": 180,
+      "y": 180
+    },
+    "up=true,down=false,north=true,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_4d",
+      "x": 180,
+      "y": 270
+    },
+    "up=true,down=false,north=true,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_4d",
+      "x": 180,
+      "y": 0
+    },
+    "up=true,down=false,north=true,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_4d",
+      "x": 180,
+      "y": 90
+    },
+    "up=true,down=false,north=true,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_6"
+    },
+
+    "up=true,down=true,north=false,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_2s",
+      "x": 90,
+      "y": 0
+    },
+    "up=true,down=true,north=true,east=false,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3b",
+      "y": 0
+    },
+    "up=true,down=true,north=false,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3b",
+      "y": 90
+    },
+    "up=true,down=true,north=false,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3b",
+      "y": 180
+    },
+    "up=true,down=true,north=false,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_3b",
+      "y": 270
+    },
+    "up=true,down=true,north=false,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_4b",
+      "y": 0
+    },
+    "up=true,down=true,north=false,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_4b",
+      "y": 270
+    },
+    "up=true,down=true,north=true,east=true,south=false,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_4b",
+      "y": 180
+    },
+    "up=true,down=true,north=true,east=false,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_4b",
+      "y": 90
+    },
+    "up=true,down=true,north=false,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_6"
+    },
+    "up=true,down=true,north=true,east=false,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_6"
+    },
+    "up=true,down=true,north=false,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_6"
+    },
+    "up=true,down=true,north=true,east=false,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_6"
+    },
+    "up=true,down=true,north=true,east=true,south=false,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_6"
+    },
+    "up=true,down=true,north=true,east=true,south=true,west=false": {
+      "model": "floormats:block/connected/spruce/spruce_connect_6"
+    },
+    "up=true,down=true,north=true,east=true,south=true,west=true": {
+      "model": "floormats:block/connected/spruce/spruce_connect_6"
+    }
+  }
+}

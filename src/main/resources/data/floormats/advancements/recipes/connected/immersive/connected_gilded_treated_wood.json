@@ -1,0 +1,27 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [ "floormats:connected/immersive/connected_gilded_treated_wood" ]
+  },
+  "criteria": {
+    "has_creosote": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          { "tag": "forge:creosote" }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "floormats:connected/immersive/connected_gilded_treated_wood"
+      }
+    }
+  },
+  "requirements": [
+    [ "has_creosote",
+      "has_the_recipe"
+    ]
+  ]
+}

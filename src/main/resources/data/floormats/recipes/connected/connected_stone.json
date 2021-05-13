@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "stone_floormat",
+  "pattern": [
+    "xsx"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:stone"
+    },
+    "s": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "count": 2,
+    "item": "floormats:connected/connected_stone"
+  }
+}

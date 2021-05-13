@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all":    "floormats:block/floormats/nether/crimson_stem/crimson_stem_floormatblock_connect_4"
+  }
+}

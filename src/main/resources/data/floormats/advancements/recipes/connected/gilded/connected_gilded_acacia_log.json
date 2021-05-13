@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "floormats:connected/gilded/connected_gilded_acacia_log"
+    ]
+  },
+  "criteria": {
+    "has_connector": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "floormats:connectors"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "floormats:connected/gilded/connected_gilded_acacia_log"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_connector",
+      "has_the_recipe"
+    ]
+  ]
+}

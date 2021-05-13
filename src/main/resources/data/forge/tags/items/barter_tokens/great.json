@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "floormats:connected/gilded/connected_gilded_acacia_log",
+    "floormats:connected/gilded/connected_gilded_birch_log",
+    "floormats:connected/gilded/connected_gilded_darkoak_log",
+    "floormats:connected/gilded/connected_gilded_jungle_log",
+    "floormats:connected/gilded/connected_gilded_oak_log",
+    "floormats:connected/gilded/connected_gilded_spruce_log",
+    "floormats:connected/nether/connected_gilded_crimson_stem",
+    "floormats:connected/nether/connected_gilded_warped_stem",
+    "floormats:connected/immersive/connected_gilded_treated_wood"
+  ]
+}

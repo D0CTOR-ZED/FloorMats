@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "floormats:connected/wooden/connected_acacia_log",
+    "floormats:connected/wooden/connected_birch_log",
+    "floormats:connected/wooden/connected_darkoak_log",
+    "floormats:connected/wooden/connected_jungle_log",
+    "floormats:connected/wooden/connected_oak_log",
+    "floormats:connected/wooden/connected_spruce_log"
+  ]
+}

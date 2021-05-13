@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "optional": [
+    "#forge:ingots/electrum",
+    "#forge:ingots/gold",
+    "immersiveengineering:ingot_electrum",
+    "spareparts:corinthian/corinthian_ingot"
+  ],
+  "values": [
+    "minecraft:gold_ingot"
+  ]
+}
