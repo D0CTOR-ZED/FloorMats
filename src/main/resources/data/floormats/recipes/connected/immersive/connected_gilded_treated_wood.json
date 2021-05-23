@@ -9,8 +9,8 @@
     "x": {
       "tag": "immersiveengineering:treated_wood"
     },
-    "c": {
-      "tag": "floormats:connectors"
+    "s": {
+      "tag": "forge:rods/wooden"
     },
     "g": {
       "tag": "floormats:gilding"

@@ -9,8 +9,8 @@
     "x": {
       "tag": "minecraft:birch_logs"
     },
-    "c": {
-      "tag": "floormats:connectors"
+    "s": {
+      "tag": "forge:rods/wooden"
     },
     "g": {
       "tag": "floormats:gilding"

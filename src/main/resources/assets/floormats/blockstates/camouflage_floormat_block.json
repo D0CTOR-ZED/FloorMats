@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "north=false,east=false,south=false,west=false": { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=true,east=false,south=false,west=false" : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=false,east=true,south=false,west=false" : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=false,east=false,south=true,west=false" : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=false,east=false,south=false,west=true" : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=false,east=false,south=true,west=true"  : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=false,east=true,south=true,west=false"  : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=true,east=true,south=false,west=false"  : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=true,east=false,south=false,west=true"  : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=false,east=true,south=false,west=true"  : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=true,east=false,south=true,west=false"  : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=false,east=true,south=true,west=true"   : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=true,east=false,south=true,west=true"   : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=true,east=true,south=false,west=true"   : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=true,east=true,south=true,west=false"   : { "model": "floormats:block/floormats/camouflage/camouflage" },
+    "north=true,east=true,south=true,west=true"    : { "model": "floormats:block/floormats/camouflage/camouflage" }
+  }
+}

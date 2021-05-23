@@ -1,0 +1,7 @@
+{
+  "parent": "floormats:block/floormats/floormat_inventory",
+  "textures": {
+    "top": "floormats:block/floormats/camouflage",
+    "side": "floormats:block/floormats/camouflage"
+  }
+}

@@ -11,7 +11,6 @@ import net.minecraft.block.AbstractPressurePlateBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IWaterLoggable;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -46,6 +45,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
+import org.jetbrains.annotations.NotNull;
 import zed.d0c.clusters.Clusters;
 import zed.d0c.floormats.setup.Registration;
 
@@ -107,23 +107,11 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
     }
 
     protected void playClickOnSound(IWorld worldIn, BlockPos pos) {
-        if (this.material.equals(Material.WOOD)) {
-            worldIn.playSound(null, pos, SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.8F);
-        } else if (this.material.equals(Material.ROCK)) {
-            worldIn.playSound(null, pos, SoundEvents.BLOCK_STONE_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.6F);
-        } else if (this.material.equals(Material.IRON)) {
-            worldIn.playSound(null, pos, SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
-        }
+        FloorMatClusters.playClickOnSound(worldIn,pos);
     }
 
     protected void playClickOffSound(IWorld worldIn, BlockPos pos) {
-        if (this.material.equals(Material.WOOD)) {
-            worldIn.playSound(null, pos, SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.8F);
-        } else if (this.material.equals(Material.ROCK)) {
-            worldIn.playSound(null, pos, SoundEvents.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.6F);
-        } else if (this.material.equals(Material.IRON)) {
-            worldIn.playSound(null, pos, SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
-        }
+        FloorMatClusters.playClickOffSound(worldIn,pos);
     }
 
     protected int computeRedstoneStrength(World worldIn, BlockPos pos) {
@@ -355,98 +343,40 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
     @Nonnull
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState stateIn, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+        if (worldIn.isRemote) return ActionResultType.SUCCESS;
         ItemStack itemInHand = (hand == MAIN_HAND) ? player.inventory.getCurrentItem() : player.inventory.offHandInventory.get(0);
-        /* Moved particles to server
-        if ((worldIn.isRemote)) {
-            if (itemInHand.getItem() instanceof EnderPearlItem) {
-                BlockPos iPos = pos.toImmutable();
-                double x = iPos.getX();
-                double y = iPos.getY();
-                double z = iPos.getZ();
-                for (int i = 0; i < 32; ++i) {
-                    worldIn.addParticle(ParticleTypes.PORTAL, x + random.nextDouble(), y + random.nextDouble() * 0.4D, z + random.nextDouble(), random.nextGaussian(), 0.0D, random.nextGaussian());
-                }
-            }
+        if ((!isConnector(itemInHand.getItem())) && (!isLinker(itemInHand.getItem()))) {
+            return ActionResultType.PASS;
         }
-        */
-        if (!worldIn.isRemote) {
-            final float pitch = 0.8F / (random.nextFloat() * 0.4F + 0.8F);
-            if (FloorMatClusters.canAlter(worldIn, pos, stateIn, player.getUniqueID())) {
-                BlockPos iPos = pos.toImmutable();
-                if (isConnector(itemInHand.getItem())) {
-                    worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_WRENCHED.get(), SoundCategory.NEUTRAL, 0.5F, pitch );
-                    if ((toolUsedPosition.containsKey(player)) && (toolUsedStack.get(player).equals(itemInHand))) {
-                        BlockPos firstPos = toolUsedPosition.get(player);
-                        BlockState oldFirstBS = worldIn.getBlockState(firstPos);
-                        for (Direction direction : Direction.Plane.HORIZONTAL) {
-                            BooleanProperty directionProperty = FACING_TO_PROPERTY_MAP.get(direction);
-                            if ((iPos.offset(direction).equals(firstPos)) && (worldIn.getBlockState(firstPos).getBlock() == stateIn.getBlock())) {
-                                BlockState newState = stateIn.with(FACING_TO_PROPERTY_MAP.get(direction),!stateIn.get(FACING_TO_PROPERTY_MAP.get(direction)));
-                                BlockState newFirstBS = oldFirstBS.with(FACING_TO_PROPERTY_MAP.get(direction.getOpposite()),oldFirstBS.get(FACING_TO_PROPERTY_MAP.get(direction.getOpposite())));
-                                worldIn.setBlockState(firstPos, newFirstBS, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
-                                worldIn.markBlockRangeForRenderUpdate(iPos, oldFirstBS, newFirstBS);
-                                worldIn.setBlockState(iPos, newState, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
-                                worldIn.markBlockRangeForRenderUpdate(iPos, stateIn, newState);
-                                toolUsedPosition.remove(player);
-                                toolUsedStack.remove(player);
-                                if (newState.get(directionProperty)) {
-                                    FloorMatClusters.addToClusters(worldIn, iPos, newState);
-                                } else {
-                                    FloorMatClusters.alterClusters(worldIn, iPos, newState);
-                                }
-                                return ActionResultType.SUCCESS;
-                            }
-                        }
-                    }
-                    toolUsedPosition.put(player, iPos);
-                    toolUsedStack.put(player, itemInHand);
-                    return ActionResultType.SUCCESS;
-                }
-                if (isLinker(itemInHand.getItem())) {
-                    FloorMatClusters.linkEffects(worldIn,iPos,stateIn);
-                    if (linkUsedPosition.containsKey(player)) {
-                        BlockPos firstPos = linkUsedPosition.get(player);
-                        BlockState firstBS = worldIn.getBlockState(firstPos);
-                        if ((firstBS.getBlock() instanceof AbstractFloorMatBlock)
-                                && FloorMatClusters.canAlter(worldIn, firstPos, firstBS, player.getUniqueID())) {
-                            FloorMatClusters.linkEffects(worldIn,firstPos,firstBS);
-                            if ( FloorMatClusters.linkClusters(worldIn, iPos, stateIn, firstPos, firstBS) ) {
-                                if (!player.abilities.isCreativeMode) {
-                                    if (itemInHand.getMaxStackSize() > 1) {
-                                        itemInHand.shrink(1);
-                                    } else if (itemInHand.attemptDamageItem(1, worldIn.rand, (ServerPlayerEntity) player)) {
-                                        itemInHand.setCount(0);
-                                    }
-                                    if (hand == MAIN_HAND) {
-                                        player.inventory.mainInventory.set(player.inventory.currentItem, itemInHand);
-                                    } else {
-                                        player.inventory.offHandInventory.set(0, itemInHand);
-                                    }
-                                }
-                                worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_LINKED.get(), SoundCategory.NEUTRAL, 0.5F, pitch + 0.4F);
-                            } else {
-                                worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_UNLINKED.get(), SoundCategory.NEUTRAL, 0.5F, pitch + 0.4F);
-                            }
-                            linkUsedPosition.remove(player);
-                        } else {
-                            linkUsedPosition.put(player, iPos);
-                            worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_MARKED.get(), SoundCategory.NEUTRAL, 0.5F, pitch);
-                        }
-                    } else {
-                        linkUsedPosition.put(player, iPos);
-                        worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_MARKED.get(), SoundCategory.NEUTRAL, 0.5F, pitch);
-                    }
-                    player.getCooldownTracker().setCooldown(itemInHand.getItem(), 20);
-                    player.addStat(Stats.ITEM_USED.get(itemInHand.getItem()));
-                    return ActionResultType.SUCCESS;
-                }
-            } else {
-                if (isLinker(itemInHand.getItem())) {
-                    worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_DENIED.get(), SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                }
-            }
+        if (!FloorMatClusters.canAlter(worldIn, pos, stateIn, player.getUniqueID())) {
+            worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_DENIED.get(), SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            return ActionResultType.SUCCESS;
         }
+        ItemStack itemInOppositeHand = (hand != MAIN_HAND) ? player.inventory.getCurrentItem() : player.inventory.offHandInventory.get(0);
+        BlockPos iPos = pos.toImmutable();
+        if (isConnector(itemInHand.getItem()))
+            return useConnector(stateIn, worldIn, player, itemInOppositeHand, iPos, trace);
+        if (isLinker(itemInHand.getItem()))
+            return useLinker(stateIn, worldIn, player, hand, itemInHand, iPos);
         return ActionResultType.SUCCESS;
+    }
+
+    private Direction getHorizontalDirectionFromQuadrant(BlockPos pos, BlockRayTraceResult trace) {
+        final double hitX = trace.getHitVec().x - pos.getX() - 0.5;
+        final double hitY = trace.getHitVec().y - pos.getY() - 0.5;
+        final double hitZ = trace.getHitVec().z - pos.getZ() - 0.5;
+        switch (trace.getFace()) {
+            case UP:
+            case DOWN: return (Math.abs(hitX)>Math.abs(hitZ))
+                    ?   ( (hitX>0) ? Direction.EAST : Direction.WEST )
+                    :   ( (hitZ>0) ? Direction.SOUTH : Direction.NORTH );
+            case NORTH:
+            case SOUTH: return ( (hitX>0) ? Direction.EAST : Direction.WEST );
+            case EAST:
+            case WEST: return ( (hitZ>0) ? Direction.SOUTH : Direction.NORTH );
+            default:
+                throw new IllegalStateException("Unexpected value: " + trace.getFace());
+        }
     }
 
     private boolean isConnector(Item item) {
@@ -457,6 +387,83 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
     private boolean isLinker(Item item) {
         ITag<Item> tag = ItemTags.getCollection().get(new ResourceLocation(MODID, "linkers"));
         return ( (tag != null) && tag.contains(item) );
+    }
+
+    private boolean hasTag(Item item, ResourceLocation tagRL) {
+        ITag<Item> tag = ItemTags.getCollection().get(tagRL);
+        return ( (tag != null) && tag.contains(item) );
+    }
+
+    @NotNull
+    private ActionResultType useConnector(BlockState stateIn, World worldIn, PlayerEntity player, ItemStack offHand, BlockPos iPos, BlockRayTraceResult trace) {
+        worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_WRENCHED.get(), SoundCategory.NEUTRAL, 0.5F, 0.8F / (random.nextFloat() * 0.4F + 0.8F));
+
+        if (hasTag(offHand.getItem(),new ResourceLocation(MODID, "muffler"))) {
+            FloorMatClusters.toggleMuffler(worldIn, iPos);
+            return ActionResultType.SUCCESS;
+        }
+
+        Direction direction = getHorizontalDirectionFromQuadrant(iPos,trace);
+        BlockPos adjacentPos = iPos.offset(direction);
+        BlockState oldAdjBS = worldIn.getBlockState(adjacentPos);
+        if (worldIn.getBlockState(adjacentPos).getBlock() != stateIn.getBlock()) {
+            return ActionResultType.SUCCESS;
+        }
+        BooleanProperty directionProp = FACING_TO_PROPERTY_MAP.get(direction);
+        BooleanProperty oppositeDirectionProp = FACING_TO_PROPERTY_MAP.get(direction.getOpposite());
+        BlockState newState = stateIn.with(directionProp,!stateIn.get(directionProp));
+        BlockState newAdjBS = oldAdjBS.with(oppositeDirectionProp,oldAdjBS.get(oppositeDirectionProp));
+        worldIn.setBlockState(adjacentPos, newAdjBS, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+        worldIn.markBlockRangeForRenderUpdate(iPos, oldAdjBS, newAdjBS);
+        worldIn.setBlockState(iPos, newState, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
+        worldIn.markBlockRangeForRenderUpdate(iPos, stateIn, newState);
+        if (newState.get(directionProp)) {
+            FloorMatClusters.addToClusters(worldIn, iPos, newState);
+        } else {
+            FloorMatClusters.alterClusters(worldIn, iPos, newState);
+        }
+        return ActionResultType.SUCCESS;
+    }
+
+    @NotNull
+    private ActionResultType useLinker(BlockState stateIn, World worldIn, PlayerEntity player, Hand hand, ItemStack itemInHand, BlockPos iPos) {
+        FloorMatClusters.linkEffects(worldIn, iPos, stateIn);
+        final float pitch = 0.8F / (random.nextFloat() * 0.4F + 0.8F);
+        if (linkUsedPosition.containsKey(player)) {
+            BlockPos firstPos = linkUsedPosition.get(player);
+            BlockState firstBS = worldIn.getBlockState(firstPos);
+            if ((firstBS.getBlock() instanceof AbstractFloorMatBlock)
+                    && FloorMatClusters.canAlter(worldIn, firstPos, firstBS, player.getUniqueID())) {
+                FloorMatClusters.linkEffects(worldIn,firstPos,firstBS);
+                if ( FloorMatClusters.linkClusters(worldIn, iPos, stateIn, firstPos, firstBS) ) {
+                    if (!player.abilities.isCreativeMode) {
+                        if (itemInHand.getMaxStackSize() > 1) {
+                            itemInHand.shrink(1);
+                        } else if (itemInHand.attemptDamageItem(1, worldIn.rand, (ServerPlayerEntity) player)) {
+                            itemInHand.setCount(0);
+                        }
+                        if (hand == MAIN_HAND) {
+                            player.inventory.mainInventory.set(player.inventory.currentItem, itemInHand);
+                        } else {
+                            player.inventory.offHandInventory.set(0, itemInHand);
+                        }
+                    }
+                    worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_LINKED.get(), SoundCategory.NEUTRAL, 0.5F, pitch + 0.4F);
+                } else {
+                    worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_UNLINKED.get(), SoundCategory.NEUTRAL, 0.5F, pitch + 0.4F);
+                }
+                linkUsedPosition.remove(player);
+            } else {
+                linkUsedPosition.put(player, iPos);
+                worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_MARKED.get(), SoundCategory.NEUTRAL, 0.5F, pitch);
+            }
+        } else {
+            linkUsedPosition.put(player, iPos);
+            worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_MARKED.get(), SoundCategory.NEUTRAL, 0.5F, pitch);
+        }
+        player.getCooldownTracker().setCooldown(itemInHand.getItem(), 20);
+        player.addStat(Stats.ITEM_USED.get(itemInHand.getItem()));
+        return ActionResultType.SUCCESS;
     }
 
 }

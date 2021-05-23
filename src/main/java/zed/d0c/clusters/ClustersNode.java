@@ -8,12 +8,15 @@ package zed.d0c.clusters;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -22,6 +25,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.registries.ForgeRegistries;
 import zed.d0c.floormats.blocks.AbstractFloorMatBlock;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -57,6 +61,7 @@ import static zed.d0c.clusters.Clusters.ClustersSet;
  *  NODE_MAP            NODE_MAP_KEY        CompoundNBT (Key: BLOCK_POS, Value: BOOLEAN)
  *      BLOCK_POS       N/A                 String (BlockPos.toLong.toString)
  *      DIRECT_POWER    BLOCK_POS           boolean (Indicates directly powered)
+ *  BIT_FLAGS (1.5.0+)  BIT_FLAGS_KEY       Long
  *  ************************************************************************************/
 
 // Public due to PunchCards using it in their read/writes.
@@ -69,6 +74,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     private UUID cnID;
     UUID cnLink;
     private UUID cnLinkBack;
+    private int cnBitFlags;
     // private final HashMap<UUID,Long> accessLog = new HashMap<>();
 
     static final HashMap<UUID, ClustersNode> idRegistry = new HashMap<>();
@@ -79,8 +85,12 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     private static final String ID_KEY              = "cnID"; // only assigned when needed
     private static final String LINK_KEY            = "cnLink";
     private static final String LINK_BACK_KEY       = "cnLinkBack";
+    private static final String BIT_FLAGS_KEY       = "cnBitFlags";
     // private static final String ACCESS_LOG_KEY      = "cnAccessLog";
     protected static final Random random = new Random();
+
+    // BIT_FLAGS:
+    private static final int BF_MUTED = 1;
 
     ClustersNode(Block blockType, HashSet<UUID> uuidSet) {
         cnBlock       = blockType;
@@ -125,12 +135,13 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
                 nodeMapNBT.putBoolean(Long.toString(key.toLong()), cnNodeMap.get(key));
             }
             nbt.put(NODE_MAP_KEY,nodeMapNBT);
+            if (cnBitFlags!=0) nbt.putInt(BIT_FLAGS_KEY,cnBitFlags);
         }
         return nbt;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT entry) {
+    public void deserializeNBT(@Nonnull CompoundNBT entry) {
         if (entry.hasUniqueId(ID_KEY)) {
             cnID = entry.getUniqueId(ID_KEY);
             idRegistry.put(cnID,this);
@@ -147,7 +158,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
         for (String key : nodeMapNBT.keySet()) {
             cnNodeMap.put(BlockPos.fromLong(Long.parseLong(key)),nodeMapNBT.getBoolean(key));
         }
-
+        cnBitFlags = entry.getInt(BIT_FLAGS_KEY);
     }
 
     public Block getNodeBlockType() { return cnBlock; }
@@ -161,7 +172,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
 
     public boolean isEmpty() { return cnNodeMap.isEmpty(); }
 
-    public int getSize() { return cnNodeMap.keySet().size(); }
+//  public int getSize() { return cnNodeMap.keySet().size(); }
 
     boolean contains(Block block, BlockPos pos) {
         // this is where a check for bounds might prevent searching
@@ -531,6 +542,26 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
 
     public boolean hasDirectPowerMarked(BlockPos pos) {
         return cnNodeMap.get(pos);
+    }
+
+    boolean isMuffled() { return (cnBitFlags & BF_MUTED)!=0; }
+
+    public void toggleMuffler() { cnBitFlags = cnBitFlags ^ BF_MUTED; }
+
+    public void playClickOnSound(World worldIn, BlockPos pos) {
+        if (isMuffled()) return;
+        Material material = cnBlock.getDefaultState().getMaterial();
+        if (material.equals(Material.WOOD))      { worldIn.playSound(null, pos, SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.8F); }
+        else if (material.equals(Material.ROCK)) { worldIn.playSound(null, pos, SoundEvents.BLOCK_STONE_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.6F); }
+        else if (material.equals(Material.IRON)) { worldIn.playSound(null, pos, SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.90000004F); }
+    }
+
+    public void playClickOffSound(World worldIn, BlockPos pos) {
+        if (isMuffled()) return;
+        Material material = cnBlock.getDefaultState().getMaterial();
+        if (material.equals(Material.WOOD))      { worldIn.playSound(null, pos, SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.8F); }
+        else if (material.equals(Material.ROCK)) { worldIn.playSound(null, pos, SoundEvents.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.6F); }
+        else if (material.equals(Material.IRON)) { worldIn.playSound(null, pos, SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.90000004F); }
     }
 
 }

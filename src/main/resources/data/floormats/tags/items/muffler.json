@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "optional": [
+    "#quark:quilted_wools"
+  ],
+  "values": [
+    "#minecraft:wool"
+  ]
+}

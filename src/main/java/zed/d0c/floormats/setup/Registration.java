@@ -83,6 +83,11 @@ public class Registration {
     public static final RegistryObject<Gold_FloorMat_Block> GOLD_FLOORMAT_BLOCK = BLOCKS.register("gold_floormat_block", Gold_FloorMat_Block::new);
     public static final RegistryObject<Item> GOLD_FLOORMAT_ITEM = ITEMS.register("gold_floormat_item", () -> new BlockItem(GOLD_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
 
+/*
+    public static final RegistryObject<Camouflage_FloorMat_Block> CAMOUFLAGE_FLOORMAT_BLOCK = BLOCKS.register("camouflage_floormat_block", Camouflage_FloorMat_Block::new);
+    public static final RegistryObject<Item> CAMOUFLAGE_FLOORMAT_ITEM = ITEMS.register("camouflage_floormat_item", () -> new BlockItem(CAMOUFLAGE_FLOORMAT_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
+*/
+
     // Immersive Floor Mats
 
     public static final RegistryObject<Wooden_FloorMat_Block> TREATED_WOOD_FLOORMAT_BLOCK = BLOCKS.register("immersive/treated_wood_floormat_block", Wooden_FloorMat_Block::new);

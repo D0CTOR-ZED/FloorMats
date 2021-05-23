@@ -28,6 +28,7 @@
     "block.floormats.gold_floormat_block"   : "Gold Floor Mat",
     "block.floormats.iron_floormat_block"   : "Iron Floor Mat",
     "block.floormats.stone_floormat_block"  : "Stone Floor Mat",
+    "block.floormats.camouflage_floormat_block"  : "Camouflage Floor Mat",
 
     "block.floormats.connected.wooden.connected_acacia_log"  : "Connected Acacia Log",
     "block.floormats.connected.wooden.connected_birch_log"   : "Connected Birch Log",

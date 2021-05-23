@@ -9,11 +9,15 @@ package zed.d0c.clusters;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.RegistryKey;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import zed.d0c.punchcards.PunchCards;
@@ -298,6 +302,22 @@ public class Clusters {
 
     public boolean hasDirectPower(BlockState state, World worldIn, BlockPos pos) {
         return getNode(worldIn,state,pos).hasDirectPowerMarked(pos);
+    }
+
+    public void playClickOnSound(IWorld iWorldIn, BlockPos pos) {
+        if (!(iWorldIn instanceof World)) { return; } // Assuming it's always an instanceof, but needed to safely cast.
+        final World worldIn = (World) iWorldIn;
+        getNode(worldIn,worldIn.getBlockState(pos),pos).playClickOnSound(worldIn,pos);
+    }
+
+    public void playClickOffSound(IWorld iWorldIn, BlockPos pos) {
+        if (!(iWorldIn instanceof World)) { return; } // Assuming it's always an instanceof, but needed to safely cast.
+        final World worldIn = (World) iWorldIn;
+        getNode(worldIn,worldIn.getBlockState(pos),pos).playClickOffSound(worldIn,pos);
+    }
+
+    public void toggleMuffler(World worldIn, BlockPos pos) {
+        getNode(worldIn,worldIn.getBlockState(pos),pos).toggleMuffler();
     }
 
 }
