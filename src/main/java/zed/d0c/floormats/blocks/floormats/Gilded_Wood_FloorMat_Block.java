@@ -8,8 +8,7 @@ import net.minecraftforge.common.ToolType;
 public class Gilded_Wood_FloorMat_Block extends Gold_FloorMat_Block {
 
     public Gilded_Wood_FloorMat_Block() {
-        super(Sensitivity.PLAYERS,
-                Properties.create(Material.WOOD, MaterialColor.GOLD)
+        super(Properties.create(Material.WOOD, MaterialColor.GOLD)
                         .sound(SoundType.WOOD)
                         .hardnessAndResistance(1.0f)
                         .harvestLevel(0)

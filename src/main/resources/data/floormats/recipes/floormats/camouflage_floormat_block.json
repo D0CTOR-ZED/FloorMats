@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "camouflage_floormat",
+  "pattern": [
+    "abc",
+    "xrx",
+    "def"
+  ],
+  "key": {
+    "a": {
+      "tag": "forge:glass_panes/red"
+    },
+    "b": {
+      "tag": "forge:glass_panes/green"
+    },
+    "c": {
+      "tag": "forge:glass_panes/blue"
+    },
+    "x": {
+      "tag": "floormats:storage_blocks/gilding"
+    },
+    "r": {
+      "tag": "forge:dusts/redstone"
+    },
+    "d": {
+      "tag": "forge:dyes/red"
+    },
+    "e": {
+      "tag": "forge:dyes/green"
+    },
+    "f": {
+      "tag": "forge:dyes/blue"
+    }
+  },
+  "result": {
+    "count": 4,
+    "item": "floormats:camouflage_floormat_item"
+  }
+}

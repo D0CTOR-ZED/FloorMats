@@ -6,14 +6,18 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import zed.d0c.floormats.FloorMats;
+import zed.d0c.floormats.blocks.floormats.Camouflage_FloorMat_Block;
 import zed.d0c.floormats.render.CamouflageBakedModel;
+
+import javax.annotation.Nullable;
+
+import static zed.d0c.floormats.setup.StartupCommon.blockCamouflage;
 
 // @Mod.EventBusSubscriber(modid = FloorMats.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class StartupClientOnly
@@ -28,7 +32,7 @@ public class StartupClientOnly
         // Replace the mapping with our CamouflageBakedModel.
         // we only have one BlockState variant but I've shown code that loops through all of them, in case you have more than one.
 
-        for (BlockState blockState : StartupCommon.blockCamouflage.getStateContainer().getValidStates()) {
+        for (BlockState blockState : blockCamouflage.getStateContainer().getValidStates()) {
             ModelResourceLocation variantMRL = BlockModelShapes.getModelLocation(blockState);
             IBakedModel existingModel = event.getModelRegistry().get(variantMRL);
             if (existingModel == null) {
@@ -45,9 +49,22 @@ public class StartupClientOnly
 
     @SubscribeEvent
     public static void onClientSetupEvent(FMLClientSetupEvent event) {
-        // Tell the renderer to render the camouflage block and Altimeter as a solid texture
-        RenderTypeLookup.setRenderLayer(StartupCommon.blockCamouflage, RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(blockCamouflage, RenderType.getCutoutMipped());
+        // RenderTypeLookup.setRenderLayer(StartupCommon.blockCamouflage, RenderType.getTranslucent());
     }
 
     private static final Logger LOGGER = LogManager.getLogger();
+
+    @SubscribeEvent
+    public static void onBlockColorHandlerEvent(final ColorHandlerEvent.Block event)
+    {   event.getBlockColors().register((state, world, pos, tintIndex) ->
+            {
+                return ( (!(state.getBlock() instanceof Camouflage_FloorMat_Block)) || (world == null) || (pos == null) )
+                        ? -1
+                        : event.getBlockColors().getColor(world.getBlockState(pos.down()), world, pos.down(), tintIndex);
+                // public int getColor(BlockState blockStateIn, @Nullable IBlockDisplayReader lightReaderIn, @Nullable BlockPos blockPosIn, int tintIndexIn) {
+
+            }, blockCamouflage);
+    }
+
 }

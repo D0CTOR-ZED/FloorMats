@@ -271,6 +271,7 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
                     cnNodeMap.put(iPos, true);
                 }
                 if (!alreadyPowered) {
+                    playClickOnSound(worldIn,iPos);
                     loopParser loop = new loopParser(this);
                     do {
                         HashSet<BlockPos> posToPower = new HashSet<>(loop.get().cnNodeMap.keySet());

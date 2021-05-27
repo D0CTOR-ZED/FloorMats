@@ -379,17 +379,17 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
         }
     }
 
-    private boolean isConnector(Item item) {
+    public static boolean isConnector(Item item) {
         ITag<Item> tag = ItemTags.getCollection().get(new ResourceLocation(MODID, "connectors"));
         return ( (tag != null) && tag.contains(item) );
     }
 
-    private boolean isLinker(Item item) {
+    private static boolean isLinker(Item item) {
         ITag<Item> tag = ItemTags.getCollection().get(new ResourceLocation(MODID, "linkers"));
         return ( (tag != null) && tag.contains(item) );
     }
 
-    private boolean hasTag(Item item, ResourceLocation tagRL) {
+    private static boolean hasTag(Item item, ResourceLocation tagRL) {
         ITag<Item> tag = ItemTags.getCollection().get(tagRL);
         return ( (tag != null) && tag.contains(item) );
     }
@@ -406,7 +406,7 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
         Direction direction = getHorizontalDirectionFromQuadrant(iPos,trace);
         BlockPos adjacentPos = iPos.offset(direction);
         BlockState oldAdjBS = worldIn.getBlockState(adjacentPos);
-        if (worldIn.getBlockState(adjacentPos).getBlock() != stateIn.getBlock()) {
+        if ( (worldIn.getBlockState(adjacentPos).getBlock() != stateIn.getBlock()) || (!FloorMatClusters.canAlter(worldIn, adjacentPos, stateIn, player.getUniqueID())) ) {
             return ActionResultType.SUCCESS;
         }
         BooleanProperty directionProp = FACING_TO_PROPERTY_MAP.get(direction);

@@ -24,8 +24,8 @@ public class Gold_FloorMat_Block extends AbstractFloorMatBlock {
         );
     }
 
-    public Gold_FloorMat_Block(Sensitivity sensitivity, Properties properties) {
-        super(sensitivity,properties);
+    public Gold_FloorMat_Block(Properties properties) {
+        super(Sensitivity.PLAYERS,properties);
     }
 
     @Override
