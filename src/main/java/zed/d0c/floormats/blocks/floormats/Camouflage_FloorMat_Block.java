@@ -28,11 +28,11 @@ import static net.minecraft.util.math.shapes.VoxelShapes.empty;
 public class Camouflage_FloorMat_Block extends Gold_FloorMat_Block {
 
     public Camouflage_FloorMat_Block() {
-        super(  Properties.create(Material.ROCK)
+        super(  Properties.create(Material.WOOD, MaterialColor.GOLD)
                         .sound(SoundType.WOOD)
                         .hardnessAndResistance(1.0f)
                         .harvestLevel(0)
-                        .harvestTool(ToolType.PICKAXE)
+                        .harvestTool(ToolType.AXE)
                         .notSolid()
                         );
     }

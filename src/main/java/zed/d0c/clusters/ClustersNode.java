@@ -90,7 +90,8 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     protected static final Random random = new Random();
 
     // BIT_FLAGS:
-    private static final int BF_MUTED = 1;
+    private static final int BF_MUTED    = 1;
+    private static final int BF_INVERTED = 2;
 
     ClustersNode(Block blockType, HashSet<UUID> uuidSet) {
         cnBlock       = blockType;
@@ -246,16 +247,10 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     public boolean powerNode(World worldIn, @Nullable BlockPos iPos, @Nullable ArrayList<PlayerEntity> playerList) {
         // We only need to act if the node wasn't already marked as directly powered.
         if ( (iPos == null) || (!cnNodeMap.get(iPos)) ) {
-            if ( (playerList != null) && (!cnUUID_Set.isEmpty()) ) {
-                boolean playerRegistered = false;
-                for (PlayerEntity player : playerList) {
-                    if (cnUUID_Set.contains(player.getUniqueID())) {
-                        playerRegistered = true;
-                        break;
-                    }
-                }
-                if (!playerRegistered) {
 
+            if ( (playerList != null) && (!cnUUID_Set.isEmpty()) ) {
+                // Determine if at least one player on the mat can activate the floor mat
+                if (playerList.stream().noneMatch(player -> isInverted() ^ cnUUID_Set.contains(player.getUniqueID()))) {
                     return false;
                 }
             }
@@ -544,6 +539,10 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     public boolean hasDirectPowerMarked(BlockPos pos) {
         return cnNodeMap.get(pos);
     }
+
+    boolean isInverted() { return (cnBitFlags & BF_INVERTED)!=0; }
+
+    public void toggleInverted() { cnBitFlags = cnBitFlags ^ BF_INVERTED; }
 
     boolean isMuffled() { return (cnBitFlags & BF_MUTED)!=0; }
 

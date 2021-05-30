@@ -57,21 +57,27 @@
     "block.floormats.connected.connected_stone"      : "Connected Stone",
 
     "command.floormats"                     : "§nWelcome to Floor Mats by D0CTOR ZED!§r\n\nTo get a list of help topics, type §a/floormats help§r.\nFor help with those topics, type §a/floormats help [topic]§r.",
-    "command.floormats.help"                : "Help is available for the following topics:\n§aconnections§r, §agold§r, §alinking§r, §apower§r, §atypes§r, §awiki§r.",
-    "command.floormats.help.connections"    : "You can break and reform connections between identical adjacent floor mat blocks by right-clicking each of the floor mat blocks with a connector.  See also §a/floormats tools§r.",
-    "command.floormats.help.gold"           : "Gold floor mats are triggered by the player(s) who placed the floor mat.  Players are not linked to specific blocks, so large groups can share a small mat if blocks are added by each player and removed as needed for size.  Only removing the last block will unlink the player(s).",
+    "command.floormats.help"                : "Help is available for the following topics:\n§aconnections§r, §agold§r, §alinking§r, §amodifiers§r, §apower§r, §atypes§r, §awiki§r.",
+    "command.floormats.help.blocks"         : "Connected blocks are decorative blocks that can have their connections broken/unbroken using a connector.  See also §a/floormats help connections§r.",
+    "command.floormats.help.connections"    : "You can break and reform connections between identical adjacent floor mats by right-clicking near where the two floor mats blocks meet with a connector.  See also §a/floormats tools§r.",
+    "command.floormats.help.gold"           : "Gold floor mats are triggered by the player(s) who placed the floor mat.  Players are not linked to specific blocks, so large groups can share a small mat if blocks are added by each player and removed as needed for size.  Only removing the last block will unlink the player(s).  See also §a/floormats help modifiers§r.",
     "command.floormats.help.linking"        : "You can link multiple floor mats (in the same dimension) by right-clicking each floor mat with a linker.  You can unlink a floor mat by right-clicking it twice.  See also §a/floormats tools§r.",
+    "command.floormats.help.modifiers"      : "You can modify a floor mat by right-clicking it with a connector while holding certain items in your other hand.  You can muffle them so that they make no sound.  You can invert gold/gilded floor mats so they are only activated by players that didn't place them.  See also §a/floormats modifiers§r.",
     "command.floormats.help.power"          : "A floor mat will pulse when it receives redstone power from a block it is on.  For example, a button placed on the side of a block will cause a floor mat on that block to pulse.",
     "command.floormats.help.types"          : "\n§oWooden:§r triggered by any player, mob or dropped item.\n\n§oStone§r: triggered by players and mobs\n\n§oMetal§r: activated by players.  See also §a/floormats help gold§r.",
-    "command.floormats.help.wiki"           : "Check out the wiki for more details: https://github.com/D0CTOR-ZED/FloorMats/wiki",
+    "command.floormats.help.wiki"           : "Check out the wiki for more details:",
 
     "command.floormats.reset.corrections"       : "%d corrections made.",
     "command.floormats.reset.feedback"          : "Floor Mats data reset!",
     "command.floormats.reset.world_not_found"   : "World not found during reset?!?",
 
-    "command.floormats.tools.tag_disabled"  : "The feature has been disabled.",
+    "command.floormats.tag_disabled"  : "The feature has been disabled (the tag is empty).",
+
     "command.floormats.tools.wands"         : "\n§nRemote linking tools (tag: §a§nfloormats:linkers§r§n):§r\n",
     "command.floormats.tools.wrenches"      : "\n§nConnection control tools (tag: §a§nfloormats:connectors§r§n):§r\n",
+
+    "command.floormats.modifiers.mufflers"  : "\n§nMuffler items (tag: §a§nfloormats:mufflers§r§n):§r\n",
+    "command.floormats.modifiers.inverters" : "\n§nInverter items (tag: §a§nfloormats:inverters§r§n):§r\n",
 
     "info.floormats.floormat_block"     : "Multiblock pressure plate.",
     "info.floormats.trigger.everything" : "Triggered by everything.",

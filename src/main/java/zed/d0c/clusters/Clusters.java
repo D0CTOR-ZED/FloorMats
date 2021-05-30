@@ -320,4 +320,8 @@ public class Clusters {
         getNode(worldIn,worldIn.getBlockState(pos),pos).toggleMuffler();
     }
 
+    public void toggleInverted(World worldIn, BlockPos pos) {
+        getNode(worldIn,worldIn.getBlockState(pos),pos).toggleInverted();
+    }
+
 }

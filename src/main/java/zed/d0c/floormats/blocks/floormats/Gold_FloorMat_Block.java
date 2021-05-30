@@ -5,6 +5,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
@@ -12,6 +14,8 @@ import zed.d0c.floormats.blocks.AbstractFloorMatBlock;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import static zed.d0c.floormats.FloorMats.MODID;
 
 public class Gold_FloorMat_Block extends AbstractFloorMatBlock {
 
@@ -35,6 +39,16 @@ public class Gold_FloorMat_Block extends AbstractFloorMatBlock {
         if ( (!worldIn.isRemote) && (placer != null) ) {
             FloorMatClusters.registerUniqueID(worldIn, pos, state, placer.getUniqueID());
         }
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    protected boolean offHandAction(ItemStack offHandStack, World worldIn, BlockPos iPos) {
+        if (hasTag(offHandStack.getItem(),new ResourceLocation(MODID, "inverters"))) {
+            FloorMatClusters.toggleInverted(worldIn, iPos);
+            return true;
+        }
+        return super.offHandAction(offHandStack,worldIn,iPos);
     }
 
 }

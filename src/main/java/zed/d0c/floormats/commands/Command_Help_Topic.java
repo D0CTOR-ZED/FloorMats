@@ -18,7 +18,7 @@ public class Command_Help_Topic implements Command<CommandSource> {
 
     // Parameter 'dispatcher' is never used
     public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher) {
-        final String[] topics = {"connections","gold","linking","power","types","wiki"};
+        final String[] topics = {"blocks","connections","gold","linking","modifiers","power","types","wiki"};
         return Commands.literal("help")
                 .executes(Command_Help.register(dispatcher).getCommand())
                 .then(  Commands.argument("topic", StringArgumentType.string())
@@ -27,17 +27,23 @@ public class Command_Help_Topic implements Command<CommandSource> {
     }
 
     // Exception 'com.mojang.brigadier.exceptions.CommandSyntaxException' is never thrown in the method
+    @SuppressWarnings("RedundantThrows")
     @Override
     public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
         String topic = context.getArgument("topic",String.class);
         switch (topic) {
+            case "blocks":
             case "connections":
             case "gold":
             case "linking":
+            case "modifiers":
             case "power":
             case "types":
+                context.getSource().sendFeedback(new TranslationTextComponent("command.floormats.help."+topic), false);
+                break;
             case "wiki":
-                context.getSource().sendFeedback(ForgeHooks.newChatWithLinks(new TranslationTextComponent("command.floormats.help."+topic).getUnformattedComponentText()), false);
+                context.getSource().sendFeedback(new TranslationTextComponent("command.floormats.help."+topic), false);
+                context.getSource().sendFeedback(ForgeHooks.newChatWithLinks("https://github.com/D0CTOR-ZED/FloorMats/wiki"), false);
                 break;
             default:
                 context.getSource().sendFeedback(new TranslationTextComponent("command.floormats.help.topics"), false);

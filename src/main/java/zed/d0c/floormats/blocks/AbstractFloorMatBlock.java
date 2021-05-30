@@ -389,17 +389,16 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
         return ( (tag != null) && tag.contains(item) );
     }
 
-    private static boolean hasTag(Item item, ResourceLocation tagRL) {
+    protected static boolean hasTag(Item item, ResourceLocation tagRL) {
         ITag<Item> tag = ItemTags.getCollection().get(tagRL);
         return ( (tag != null) && tag.contains(item) );
     }
 
     @NotNull
-    private ActionResultType useConnector(BlockState stateIn, World worldIn, PlayerEntity player, ItemStack offHand, BlockPos iPos, BlockRayTraceResult trace) {
+    private ActionResultType useConnector(BlockState stateIn, World worldIn, PlayerEntity player, ItemStack offHandStack, BlockPos iPos, BlockRayTraceResult trace) {
         worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_WRENCHED.get(), SoundCategory.NEUTRAL, 0.5F, 0.8F / (random.nextFloat() * 0.4F + 0.8F));
 
-        if (hasTag(offHand.getItem(),new ResourceLocation(MODID, "muffler"))) {
-            FloorMatClusters.toggleMuffler(worldIn, iPos);
+        if (offHandAction(offHandStack,worldIn,iPos)) {
             return ActionResultType.SUCCESS;
         }
 
@@ -423,6 +422,15 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
             FloorMatClusters.alterClusters(worldIn, iPos, newState);
         }
         return ActionResultType.SUCCESS;
+    }
+
+    @ParametersAreNonnullByDefault
+    protected boolean offHandAction(ItemStack offHandStack, World worldIn, BlockPos iPos) {
+        if (hasTag(offHandStack.getItem(),new ResourceLocation(MODID, "mufflers"))) {
+            FloorMatClusters.toggleMuffler(worldIn, iPos);
+            return true;
+        }
+        return false;
     }
 
     @NotNull

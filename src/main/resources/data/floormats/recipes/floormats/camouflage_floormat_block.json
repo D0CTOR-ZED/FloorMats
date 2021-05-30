@@ -3,7 +3,7 @@
   "group": "camouflage_floormat",
   "pattern": [
     "abc",
-    "xrx",
+    "xxx",
     "def"
   ],
   "key": {
@@ -17,10 +17,7 @@
       "tag": "forge:glass_panes/blue"
     },
     "x": {
-      "tag": "floormats:storage_blocks/gilding"
-    },
-    "r": {
-      "tag": "forge:dusts/redstone"
+      "tag": "floormats:gilded_wood_floormats"
     },
     "d": {
       "tag": "forge:dyes/red"
@@ -33,7 +30,7 @@
     }
   },
   "result": {
-    "count": 4,
+    "count": 3,
     "item": "floormats:camouflage_floormat_item"
   }
 }

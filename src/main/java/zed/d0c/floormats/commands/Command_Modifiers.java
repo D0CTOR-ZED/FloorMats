@@ -18,13 +18,13 @@ import java.util.Objects;
 
 import static zed.d0c.floormats.FloorMats.MODID;
 
-public class Command_Tools implements Command<CommandSource> {
+public class Command_Modifiers implements Command<CommandSource> {
 
-    private static final Command_Tools CMD = new Command_Tools();
+    private static final Command_Modifiers CMD = new Command_Modifiers();
 
     // Parameter 'dispatcher' is never used
     public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher) {
-        return Commands.literal("tools")
+        return Commands.literal("modifiers")
                 .requires(cs -> cs.hasPermissionLevel(0))
                 .executes(CMD);
     }
@@ -33,8 +33,9 @@ public class Command_Tools implements Command<CommandSource> {
     @SuppressWarnings("RedundantThrows")
     @Override
     public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
-        ModCommands.listTagItems(context,"command.floormats.tools.wrenches","connectors");
-        ModCommands.listTagItems(context,"command.floormats.tools.wands","linkers");
+        ModCommands.listTagItems(context,"command.floormats.modifiers.inverters","inverters");
+        ModCommands.listTagItems(context,"command.floormats.modifiers.mufflers","mufflers");
         return 0;
     }
+
 }
