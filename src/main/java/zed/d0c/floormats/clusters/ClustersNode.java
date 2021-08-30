@@ -4,7 +4,7 @@
  *  Copyright (c) 2020 D0CTOR ZED
  *  This code is licensed under the MIT License, available in the root folder.
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-package zed.d0c.clusters;
+package zed.d0c.floormats.clusters;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,7 +31,7 @@ import java.util.*;
 
 import static net.minecraft.block.SixWayBlock.FACING_TO_PROPERTY_MAP;
 import static net.minecraft.state.properties.BlockStateProperties.POWERED;
-import static zed.d0c.clusters.Clusters.ClustersSet;
+import static zed.d0c.floormats.clusters.Clusters.ClustersSet;
 
 /*  ************************************************************************************
  *
@@ -547,6 +547,8 @@ public class ClustersNode implements INBTSerializable<CompoundNBT> {
     boolean isMuffled() { return (cnBitFlags & BF_MUTED)!=0; }
 
     public void toggleMuffler() { cnBitFlags = cnBitFlags ^ BF_MUTED; }
+
+    public void clearPlayerList() { cnUUID_Set.clear(); }
 
     public void playClickOnSound(World worldIn, BlockPos pos) {
         if (isMuffled()) return;

@@ -15,11 +15,8 @@ import org.apache.logging.log4j.Logger;
 import zed.d0c.floormats.blocks.floormats.Camouflage_FloorMat_Block;
 import zed.d0c.floormats.render.CamouflageBakedModel;
 
-import javax.annotation.Nullable;
-
 import static zed.d0c.floormats.setup.StartupCommon.blockCamouflage;
 
-// @Mod.EventBusSubscriber(modid = FloorMats.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class StartupClientOnly
 {
     // Called after all the other baked block models have been added to the modelRegistry
@@ -30,7 +27,6 @@ public class StartupClientOnly
         // Find the existing mappings for CamouflageBakedModel - they will have been added automatically because
         //  of our blockstates file for the BlockCamouflage.
         // Replace the mapping with our CamouflageBakedModel.
-        // we only have one BlockState variant but I've shown code that loops through all of them, in case you have more than one.
 
         for (BlockState blockState : blockCamouflage.getStateContainer().getValidStates()) {
             ModelResourceLocation variantMRL = BlockModelShapes.getModelLocation(blockState);
@@ -57,13 +53,10 @@ public class StartupClientOnly
 
     @SubscribeEvent
     public static void onBlockColorHandlerEvent(final ColorHandlerEvent.Block event)
-    {   event.getBlockColors().register((state, world, pos, tintIndex) ->
-            {
+    {   event.getBlockColors().register((state, world, pos, tintIndex) -> {
                 return ( (!(state.getBlock() instanceof Camouflage_FloorMat_Block)) || (world == null) || (pos == null) )
                         ? -1
                         : event.getBlockColors().getColor(world.getBlockState(pos.down()), world, pos.down(), tintIndex);
-                // public int getColor(BlockState blockStateIn, @Nullable IBlockDisplayReader lightReaderIn, @Nullable BlockPos blockPosIn, int tintIndexIn) {
-
             }, blockCamouflage);
     }
 

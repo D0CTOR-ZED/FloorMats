@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "optional": [
+    "#forge:storage_blocks/iron"
+  ],
+  "values": [
+    "floormats:connected/connected_iron_block",
+    "minecraft:iron_block"
+  ]
+}

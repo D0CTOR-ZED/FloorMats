@@ -3,8 +3,11 @@
   "optional": [
     "#forge:ingots/electrum",
     "#forge:ingots/gold",
+    "#forge:plates/electrum",
+    "#forge:plates/gold",
     "immersiveengineering:ingot_electrum",
-    "spareparts:corinthian/corinthian_ingot"
+    "spareparts:corinthian/corinthian_ingot",
+    "spareparts:corinthian/corinthian_plate"
   ],
   "values": [
     "minecraft:gold_ingot"

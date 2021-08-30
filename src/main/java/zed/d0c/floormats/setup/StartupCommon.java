@@ -9,6 +9,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import zed.d0c.floormats.FloorMats;
 import zed.d0c.floormats.blocks.floormats.Camouflage_FloorMat_Block;
+import zed.d0c.floormats.items.FloorMatItem;
 
 import java.util.Objects;
 
@@ -32,7 +33,7 @@ public class StartupCommon
         Item.Properties itemProperties = new Item.Properties()
                 .maxStackSize(MAXIMUM_STACK_SIZE)
                 .group(ItemGroup.BUILDING_BLOCKS);  // which inventory tab?
-        itemBlockCamouflage = new BlockItem(blockCamouflage, itemProperties);
+        itemBlockCamouflage = new FloorMatItem(blockCamouflage, itemProperties);
         itemBlockCamouflage.setRegistryName(FloorMats.MODID,"camouflage_floormat_item");
         itemRegisterEvent.getRegistry().register(itemBlockCamouflage);
 

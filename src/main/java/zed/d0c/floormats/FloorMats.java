@@ -18,11 +18,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import zed.d0c.clusters.Clusters;
+import zed.d0c.floormats.clusters.Clusters;
 import zed.d0c.floormats.setup.ClientSideOnlyModEventRegistrar;
 import zed.d0c.floormats.setup.Registration;
 import zed.d0c.floormats.setup.StartupCommon;
-import zed.d0c.punchcards.PunchCards;
+import zed.d0c.floormats.punchcards.PunchCards;
 
 import java.util.Objects;
 

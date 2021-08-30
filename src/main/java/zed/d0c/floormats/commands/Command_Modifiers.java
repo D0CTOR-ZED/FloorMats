@@ -33,8 +33,10 @@ public class Command_Modifiers implements Command<CommandSource> {
     @SuppressWarnings("RedundantThrows")
     @Override
     public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
-        ModCommands.listTagItems(context,"command.floormats.modifiers.inverters","inverters");
         ModCommands.listTagItems(context,"command.floormats.modifiers.mufflers","mufflers");
+        ModCommands.listTagItems(context,"command.floormats.modifiers.inverters","inverters");
+        ModCommands.listTagItems(context,"command.floormats.tools.opener","opener");
+
         return 0;
     }
 

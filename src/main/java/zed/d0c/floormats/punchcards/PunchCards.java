@@ -5,7 +5,7 @@
  *  This code is licensed under the MIT License, available in the root folder.
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-package zed.d0c.punchcards;
+package zed.d0c.floormats.punchcards;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -15,8 +15,8 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
-import zed.d0c.clusters.Clusters;
-import zed.d0c.clusters.ClustersNode;
+import zed.d0c.floormats.clusters.Clusters;
+import zed.d0c.floormats.clusters.ClustersNode;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;

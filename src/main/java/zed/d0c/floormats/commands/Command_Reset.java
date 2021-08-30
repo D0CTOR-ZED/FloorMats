@@ -11,7 +11,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import zed.d0c.clusters.Clusters;
+import zed.d0c.floormats.clusters.Clusters;
 
 public class Command_Reset implements Command<CommandSource> {
 

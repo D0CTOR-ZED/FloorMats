@@ -39,6 +39,7 @@ public class Command_Help_Topic implements Command<CommandSource> {
             case "modifiers":
             case "power":
             case "types":
+            case "camouflage":
                 context.getSource().sendFeedback(new TranslationTextComponent("command.floormats.help."+topic), false);
                 break;
             case "wiki":

@@ -1,18 +1,22 @@
 package zed.d0c.floormats.blocks.floormats;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockDisplayReader;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
@@ -20,7 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import zed.d0c.floormats.blocks.AbstractFloorMatBlock;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.Optional;
 
 import static net.minecraft.util.math.shapes.VoxelShapes.empty;
@@ -38,6 +44,10 @@ public class Camouflage_FloorMat_Block extends Gold_FloorMat_Block {
     }
 
     public static Optional<BlockState> appearanceBlock(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos) {
+/*
+        BlockState downState = world.getBlockState(pos.down());
+        if downState instanceof FenceBlock
+*/
         return Optional.of(world.getBlockState(pos.down()));
     }
 
@@ -89,5 +99,9 @@ public class Camouflage_FloorMat_Block extends Gold_FloorMat_Block {
         return Block.makeCuboidShape(0,0,0,16,1,16);
     }
 
+    @Override
+    public ITextComponent getToolTipText() {
+        return new TranslationTextComponent("tooltip.ctrl_shift.floor_mat.camouflage");
+    }
 
 }

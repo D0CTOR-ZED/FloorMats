@@ -4,23 +4,20 @@
  *  Copyright (c) 2020 D0CTOR ZED
  *  This code is licensed under the MIT License, available in the root folder.
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-package zed.d0c.clusters;
+package zed.d0c.floormats.clusters;
 
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import zed.d0c.punchcards.PunchCards;
+import zed.d0c.floormats.punchcards.PunchCards;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -322,6 +319,10 @@ public class Clusters {
 
     public void toggleInverted(World worldIn, BlockPos pos) {
         getNode(worldIn,worldIn.getBlockState(pos),pos).toggleInverted();
+    }
+
+    public void clearPlayerList(World worldIn, BlockPos pos) {
+        getNode(worldIn,worldIn.getBlockState(pos),pos).clearPlayerList();
     }
 
 }

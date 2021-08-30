@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import zed.d0c.floormats.blocks.AbstractFloorMatBlock;
@@ -48,7 +50,21 @@ public class Gold_FloorMat_Block extends AbstractFloorMatBlock {
             FloorMatClusters.toggleInverted(worldIn, iPos);
             return true;
         }
+        if (hasTag(offHandStack.getItem(),new ResourceLocation(MODID, "opener"))) {
+            FloorMatClusters.clearPlayerList(worldIn, iPos);
+            return true;
+        }
         return super.offHandAction(offHandStack,worldIn,iPos);
+    }
+
+    @Override
+    public boolean isGilded() {
+        return true;
+    }
+
+    @Override
+    public ITextComponent getToolTipText() {
+        return new TranslationTextComponent("tooltip.ctrl_shift.floor_mat.gilded");
     }
 
 }

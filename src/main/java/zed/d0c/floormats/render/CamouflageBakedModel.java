@@ -2,7 +2,6 @@ package zed.d0c.floormats.render;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -25,10 +24,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static net.minecraft.util.math.MathHelper.abs;
+
 public class CamouflageBakedModel implements IBakedModel {
 
-    public CamouflageBakedModel(IBakedModel unCamouflagedModel)
-    {
+    public CamouflageBakedModel(IBakedModel unCamouflagedModel) {
         modelWhenNotCamouflaged = unCamouflagedModel;
     }
 
@@ -74,15 +74,34 @@ public class CamouflageBakedModel implements IBakedModel {
 
         float thickness = 1F/16;
         float textureScale = 1F/18; // some of the next pixel was showing.  Needs to be less than 1/16.
+
+        // when on multiblocks, quads were larger than a block.  This clips them to be at most a single block in size.
+        for (int i=0; i<4; ++i) {
+            for (int j = 0; j<2; ++j) {
+                if (position_3f[i][j*2] < 0) {
+                    // oops, opposite corners weren't what was needed.  Should be whichever adjacent corner changes on that j*2
+                    // ex_2f[i][j] = tex_2f[(i+2)%4][j]-(((tex_2f[(i+2)%4][j]-tex_2f[i][j])/(position_3f[(i+2)%4][j*2]-position_3f[i][j*2]))*position_3f[(i+2)%4][j*2]);
+                    // tex_2f[i][j] = tex_2f[(i+2)%4][j]-(((tex_2f[(i+2)%4][j]-tex_2f[i][j])/(position_3f[(i+2)%4][j*2]-position_3f[i][j*2]))*position_3f[(i+2)%4][j*2]);
+                    position_3f[i][j*2] = 0;
+                } else if (position_3f[i][j*2] > 1) {
+                    // oops, opposite corners weren't what was needed.  Should be whichever adjacent corner changes on that j*2
+                    // tex_2f[i][j] = tex_2f[(i+2)%4][j]-(((tex_2f[(i+2)%4][j]-tex_2f[i][j])/(position_3f[(i+2)%4][j*2]-position_3f[i][j*2]))*(position_3f[(i+2)%4][j*2]-1));
+                    position_3f[i][j*2] = 1;
+                }
+            }
+        }
+
         switch (newQuad.getFace()) {
             case UP:
                 if (position_3f[0][1] < 1) { return; }
+                if (abs(position_3f[0][0]-position_3f[2][0])<0.98f) { return; }
+                if (abs(position_3f[0][2]-position_3f[2][2])<0.98f) { return; }
                 for (int i = 0; i < 4; i++) {
                     position_3f[i][1] = thickness;
                 }
                 break;
             case DOWN:
-                for (int i = 0; i < 4; i++) {
+                for (int i=0; i<4; i++) {
                     position_3f[i][1] *= 0.01F;
                 }
                 break;
@@ -118,36 +137,59 @@ public class CamouflageBakedModel implements IBakedModel {
         if (side == Direction.UP) {
             return Collections.emptyList();
         }
-        if ( (copiedState != null) && (quadCache.containsKey(copiedState)) ) {
+        if (copiedState==null) { // probably should never happen, but now we can rely on copiedState being non-null after this
+            return modelWhenNotCamouflaged.getQuads(state, side, rand);
+        }
+        if (quadCache.containsKey(copiedState)) {
             return quadCache.get(copiedState).get(side == null ? Direction.UP.getIndex() : side.getIndex());
         }
-        if ( (copiedState != null) && (quadCache.size()<MAX_QUAD_CACHE) ) {
+        if (!quadCache.containsKey(null)) {
+            ArrayList<ArrayList<BakedQuad>> cache = new ArrayList<>(Direction.values().length);
+            for (Direction direction : Direction.values()) {
+                cache.add(direction.getIndex(), new ArrayList<>(modelWhenNotCamouflaged.getQuads(state, (direction == Direction.UP) ? null : direction, rand)));
+            }
+            quadCache.put(null,cache);
+        }
+
+        if (copiedState.getBlock() instanceof Camouflage_FloorMat_Block) {
+            return quadCache.get(null).get((side==null?Direction.UP:side).getIndex());
+        }
+
+        if (quadCache.size()<MAX_QUAD_CACHE) {
             ArrayList<ArrayList<BakedQuad>> cache = new ArrayList<>(Direction.values().length);
             for (Direction direction : Direction.values()) {
                 ArrayList<BakedQuad> transformedQuads = new ArrayList<>();
+                IBakedModel modelFromIModelData = getActualBakedModelFromIModelData(data);
                 if (direction == Direction.UP) {
-                    for (BakedQuad quad : getActualBakedModelFromIModelData(data).getQuads(state, null, rand, data)) {
+                    for (BakedQuad quad : modelFromIModelData.getQuads(copiedState, null, rand, data)) {
                         alterQuad(quad, transformedQuads);
                     }
                 }
-                for (BakedQuad quad : getActualBakedModelFromIModelData(data).getQuads(state, direction, rand, data)) {
+                int sideSize = transformedQuads.size();
+                for (BakedQuad quad : modelFromIModelData.getQuads(copiedState, direction, rand, data)) {
                     alterQuad(quad, transformedQuads);
                 }
-                cache.add(direction.getIndex(),transformedQuads);
+                cache.add(direction.getIndex(),
+                        (transformedQuads.size() == sideSize)
+                        ?   quadCache.get(null).get(direction.getIndex())
+                        :   transformedQuads);
             }
             quadCache.put(copiedState,cache);
-            return cache.get(side == null ? Direction.UP.getIndex() : side.getIndex());
+            return cache.get((side == null ? Direction.UP : side).getIndex());
         }
+
         List<BakedQuad> transformedQuads = new ArrayList<>();
         if (side == null) {
-            for (BakedQuad quad : getActualBakedModelFromIModelData(data).getQuads(state, Direction.UP, rand, data)) {
+            for (BakedQuad quad : getActualBakedModelFromIModelData(data).getQuads(copiedState, Direction.UP, rand, data)) {
                 alterQuad(quad, transformedQuads);
             }
         }
-        for (BakedQuad quad : getActualBakedModelFromIModelData(data).getQuads(state, side, rand, data)) {
+        for (BakedQuad quad : getActualBakedModelFromIModelData(data).getQuads(copiedState, side, rand, data)) {
             alterQuad(quad, transformedQuads);
         }
-        return transformedQuads;
+        return  (transformedQuads.size() == 0)
+                ?   quadCache.get(null).get(((side == null) ? Direction.UP : side).getIndex())
+                :   transformedQuads;
     }
 
     @Override
@@ -161,26 +203,19 @@ public class CamouflageBakedModel implements IBakedModel {
     @Override
     public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data) {
         return modelWhenNotCamouflaged.getParticleTexture(data); // trying to fix stack overflow on particle data
-        // return ((IForgeBakedModel)getActualBakedModelFromIModelData(data)).getParticleTexture(data);
     }
 
     private IBakedModel getActualBakedModelFromIModelData(@Nonnull IModelData data) {
-        IBakedModel retval = modelWhenNotCamouflaged;  // default
         if (!data.hasProperty(COPIED_BLOCK)) {
             if (!loggedError) {
                 LOGGER.error("IModelData did not have expected property COPIED_BLOCK");
                 loggedError = true;
             }
-            return retval;
+            return modelWhenNotCamouflaged;
         }
         Optional<BlockState> copiedBlock = data.getData(COPIED_BLOCK);
-        if ( (copiedBlock == null) || (!copiedBlock.isPresent()) ) return retval;
-
-        Minecraft mc = Minecraft.getInstance();
-        BlockRendererDispatcher blockRendererDispatcher = mc.getBlockRendererDispatcher();
-        retval = blockRendererDispatcher.getModelForState(copiedBlock.get());
-
-        return retval;
+        if ( (copiedBlock == null) || (!copiedBlock.isPresent()) ) return modelWhenNotCamouflaged;
+        return Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(copiedBlock.get());
     }
 
     private final IBakedModel modelWhenNotCamouflaged;
@@ -189,7 +224,9 @@ public class CamouflageBakedModel implements IBakedModel {
 
     @Override
     public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull Random rand) {
-        throw new AssertionError("IBakedModel::getQuads should never be called, only IForgeBakedModel::getQuads");
+        return modelWhenNotCamouflaged.getQuads(state, side, rand);
+        // can't error on call.  Xaero's World Map calls this.
+        // throw new AssertionError("IBakedModel::getQuads should never be called, only IForgeBakedModel::getQuads");
     }
 
     // getTexture is used directly when player is inside the block.  The game will crash if you don't use something
@@ -202,39 +239,33 @@ public class CamouflageBakedModel implements IBakedModel {
 
     // ideally, this should be changed for different blocks being camouflaged, but this is not supported by vanilla or forge
     @Override
-    public boolean isAmbientOcclusion()
-    {
-        return modelWhenNotCamouflaged.isAmbientOcclusion(); // false seems better on the sides?
-        //return false;
+    public boolean isAmbientOcclusion() {
+        return modelWhenNotCamouflaged.isAmbientOcclusion();
     }
 
     @Override
-    public boolean isGui3d()
-    {
+    public boolean isGui3d() {
         return modelWhenNotCamouflaged.isGui3d();
     }
 
     @Override
     public boolean isSideLit() {
-        return modelWhenNotCamouflaged.isSideLit();  // related to item "diffuselighting"
+        return modelWhenNotCamouflaged.isSideLit();
     }
 
     @Override
-    public boolean isBuiltInRenderer()
-    {
+    public boolean isBuiltInRenderer() {
         return modelWhenNotCamouflaged.isBuiltInRenderer();
     }
 
     @Override
-    public @NotNull ItemOverrideList getOverrides()
-    {
+    public @NotNull ItemOverrideList getOverrides() {
         return modelWhenNotCamouflaged.getOverrides();
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public @NotNull ItemCameraTransforms getItemCameraTransforms()
-    {
+    public @NotNull ItemCameraTransforms getItemCameraTransforms() {
         return modelWhenNotCamouflaged.getItemCameraTransforms();
     }
 

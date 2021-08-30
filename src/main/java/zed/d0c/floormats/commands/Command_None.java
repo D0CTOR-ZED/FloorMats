@@ -8,6 +8,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.ForgeHooks;
 
 public class Command_None implements Command<CommandSource> {
 
@@ -24,6 +25,7 @@ public class Command_None implements Command<CommandSource> {
     @Override
     public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
         context.getSource().sendFeedback(new TranslationTextComponent("command.floormats"), false);
+        context.getSource().sendFeedback(ForgeHooks.newChatWithLinks("https://github.com/D0CTOR-ZED/FloorMats/wiki"), false);
         return 0;
     }
 }

@@ -46,7 +46,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import org.jetbrains.annotations.NotNull;
-import zed.d0c.clusters.Clusters;
+import zed.d0c.floormats.clusters.Clusters;
 import zed.d0c.floormats.setup.Registration;
 
 import javax.annotation.Nonnull;
@@ -69,9 +69,9 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    private static final HashMap<PlayerEntity,BlockPos> toolUsedPosition = new HashMap<>();
-    private static final HashMap<PlayerEntity,ItemStack> toolUsedStack = new HashMap<>();
-    private static final HashMap<PlayerEntity,BlockPos> linkUsedPosition = new HashMap<>();
+    private static final HashMap<PlayerEntity, BlockPos> toolUsedPosition = new HashMap<>();
+    private static final HashMap<PlayerEntity, ItemStack> toolUsedStack = new HashMap<>();
+    private static final HashMap<PlayerEntity, BlockPos> linkUsedPosition = new HashMap<>();
     protected static final Random random = new Random();
 
     protected AbstractFloorMatBlock(AbstractFloorMatBlock.Sensitivity sensitivityIn, Block.Properties properties) {
@@ -107,11 +107,11 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
     }
 
     protected void playClickOnSound(IWorld worldIn, BlockPos pos) {
-        FloorMatClusters.playClickOnSound(worldIn,pos);
+        FloorMatClusters.playClickOnSound(worldIn, pos);
     }
 
     protected void playClickOffSound(IWorld worldIn, BlockPos pos) {
-        FloorMatClusters.playClickOffSound(worldIn,pos);
+        FloorMatClusters.playClickOffSound(worldIn, pos);
     }
 
     protected int computeRedstoneStrength(World worldIn, BlockPos pos) {
@@ -175,7 +175,7 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
     @Override
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
         // hasNode is needed as work-around for post-existence entity collisions ('this' block already removed) from what seems to be multi-threaded performance enhancements mod Performant
-        if ( (!worldIn.isRemote) && FloorMatClusters.hasNode(worldIn,state,pos) && (!FloorMatClusters.hasDirectPower(state, worldIn,pos)) ) {
+        if ((!worldIn.isRemote) && FloorMatClusters.hasNode(worldIn, state, pos) && (!FloorMatClusters.hasDirectPower(state, worldIn, pos))) {
             computeRedstoneStrength(worldIn, pos);
         }
     }
@@ -214,38 +214,6 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
         super.onReplaced(state, worldIn, iPos, newState, isMoving);
     }
 
-    @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader reader, List<ITextComponent> list, ITooltipFlag flags) {
-        list.add(new TranslationTextComponent(""));
-
-        ITextComponent description = new TranslationTextComponent("info.floormats.floormat_block");
-        if ( ( description.getStyle().getColor() == null ) ||
-                ( description.getStyle().getColor() == Color.fromTextFormatting(TextFormatting.WHITE) ) ) {
-            description.getStyle().mergeStyle(description.getStyle().setColor(Color.fromTextFormatting(TextFormatting.GRAY)));
-        }
-
-        ITextComponent trigger;
-        switch (this.sensitivity) {
-            case EVERYTHING:
-                trigger = new TranslationTextComponent("info.floormats.trigger.everything");
-                break;
-            case MOBS:
-                trigger = new TranslationTextComponent("info.floormats.trigger.mobs");
-                break;
-            case ENTITIES:
-                trigger = new TranslationTextComponent("info.floormats.trigger.entities");
-                break;
-            case PLAYERS:
-                trigger = new TranslationTextComponent("info.floormats.trigger.players");
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + this.sensitivity);
-        }
-        list.add(description);
-        list.add(trigger);
-        // list.add(description.appendText("  ").appendSibling(trigger));
-    }
-
     public boolean canConnect(BlockState state) {
         return this.getBlock().equals(state.getBlock());
     }
@@ -263,9 +231,9 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
         Boolean cCEast = this.canConnect(bSEast);
         Boolean poweredConnection =
                 (cCNorth && bSNorth.get(POWERED)) ||
-                (cCSouth && bSSouth.get(POWERED)) ||
-                (cCWest && bSWest.get(POWERED)) ||
-                (cCEast && bSEast.get(POWERED));
+                        (cCSouth && bSSouth.get(POWERED)) ||
+                        (cCWest && bSWest.get(POWERED)) ||
+                        (cCEast && bSEast.get(POWERED));
         return Objects.requireNonNull(super.getStateForPlacement(context))
                 .with(BlockStateProperties.NORTH, cCNorth)
                 .with(BlockStateProperties.SOUTH, cCSouth)
@@ -283,7 +251,7 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
         if (!facing.getAxis().isHorizontal()) {
             return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
         }
-        return stateIn.with(FACING_TO_PROPERTY_MAP.get(facing),(facingState.getBlock() instanceof AbstractFloorMatBlock) && facingState.get(FACING_TO_PROPERTY_MAP.get(facing.getOpposite())));
+        return stateIn.with(FACING_TO_PROPERTY_MAP.get(facing), (facingState.getBlock() instanceof AbstractFloorMatBlock) && facingState.get(FACING_TO_PROPERTY_MAP.get(facing.getOpposite())));
     }
 
     public enum Sensitivity {
@@ -324,9 +292,9 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
     @Override
     @SuppressWarnings("deprecation")
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        if ( fromPos.equals(pos.down()) &&
+        if (fromPos.equals(pos.down()) &&
                 (!worldIn.isRemote()) &&
-                worldIn.isBlockPowered(fromPos) ) {
+                worldIn.isBlockPowered(fromPos)) {
             // this will pulse the node.  It will turn on, tick, then turn off.
             BlockPos iPos = pos.toImmutable();
             if (FloorMatClusters.applyDirectPower(worldIn, iPos, null)) {
@@ -367,13 +335,16 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
         final double hitZ = trace.getHitVec().z - pos.getZ() - 0.5;
         switch (trace.getFace()) {
             case UP:
-            case DOWN: return (Math.abs(hitX)>Math.abs(hitZ))
-                    ?   ( (hitX>0) ? Direction.EAST : Direction.WEST )
-                    :   ( (hitZ>0) ? Direction.SOUTH : Direction.NORTH );
+            case DOWN:
+                return (Math.abs(hitX) > Math.abs(hitZ))
+                        ? ((hitX > 0) ? Direction.EAST : Direction.WEST)
+                        : ((hitZ > 0) ? Direction.SOUTH : Direction.NORTH);
             case NORTH:
-            case SOUTH: return ( (hitX>0) ? Direction.EAST : Direction.WEST );
+            case SOUTH:
+                return ((hitX > 0) ? Direction.EAST : Direction.WEST);
             case EAST:
-            case WEST: return ( (hitZ>0) ? Direction.SOUTH : Direction.NORTH );
+            case WEST:
+                return ((hitZ > 0) ? Direction.SOUTH : Direction.NORTH);
             default:
                 throw new IllegalStateException("Unexpected value: " + trace.getFace());
         }
@@ -381,37 +352,37 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
 
     public static boolean isConnector(Item item) {
         ITag<Item> tag = ItemTags.getCollection().get(new ResourceLocation(MODID, "connectors"));
-        return ( (tag != null) && tag.contains(item) );
+        return ((tag != null) && tag.contains(item));
     }
 
     private static boolean isLinker(Item item) {
         ITag<Item> tag = ItemTags.getCollection().get(new ResourceLocation(MODID, "linkers"));
-        return ( (tag != null) && tag.contains(item) );
+        return ((tag != null) && tag.contains(item));
     }
 
     protected static boolean hasTag(Item item, ResourceLocation tagRL) {
         ITag<Item> tag = ItemTags.getCollection().get(tagRL);
-        return ( (tag != null) && tag.contains(item) );
+        return ((tag != null) && tag.contains(item));
     }
 
     @NotNull
     private ActionResultType useConnector(BlockState stateIn, World worldIn, PlayerEntity player, ItemStack offHandStack, BlockPos iPos, BlockRayTraceResult trace) {
         worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), Registration.FLOORMATS_WRENCHED.get(), SoundCategory.NEUTRAL, 0.5F, 0.8F / (random.nextFloat() * 0.4F + 0.8F));
 
-        if (offHandAction(offHandStack,worldIn,iPos)) {
+        if (offHandAction(offHandStack, worldIn, iPos)) {
             return ActionResultType.SUCCESS;
         }
 
-        Direction direction = getHorizontalDirectionFromQuadrant(iPos,trace);
+        Direction direction = getHorizontalDirectionFromQuadrant(iPos, trace);
         BlockPos adjacentPos = iPos.offset(direction);
         BlockState oldAdjBS = worldIn.getBlockState(adjacentPos);
-        if ( (worldIn.getBlockState(adjacentPos).getBlock() != stateIn.getBlock()) || (!FloorMatClusters.canAlter(worldIn, adjacentPos, stateIn, player.getUniqueID())) ) {
+        if ((worldIn.getBlockState(adjacentPos).getBlock() != stateIn.getBlock()) || (!FloorMatClusters.canAlter(worldIn, adjacentPos, stateIn, player.getUniqueID()))) {
             return ActionResultType.SUCCESS;
         }
         BooleanProperty directionProp = FACING_TO_PROPERTY_MAP.get(direction);
         BooleanProperty oppositeDirectionProp = FACING_TO_PROPERTY_MAP.get(direction.getOpposite());
-        BlockState newState = stateIn.with(directionProp,!stateIn.get(directionProp));
-        BlockState newAdjBS = oldAdjBS.with(oppositeDirectionProp,oldAdjBS.get(oppositeDirectionProp));
+        BlockState newState = stateIn.with(directionProp, !stateIn.get(directionProp));
+        BlockState newAdjBS = oldAdjBS.with(oppositeDirectionProp, oldAdjBS.get(oppositeDirectionProp));
         worldIn.setBlockState(adjacentPos, newAdjBS, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
         worldIn.markBlockRangeForRenderUpdate(iPos, oldAdjBS, newAdjBS);
         worldIn.setBlockState(iPos, newState, Constants.BlockFlags.BLOCK_UPDATE); // BLOCK_UPDATE to send changes to clients
@@ -426,7 +397,7 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
 
     @ParametersAreNonnullByDefault
     protected boolean offHandAction(ItemStack offHandStack, World worldIn, BlockPos iPos) {
-        if (hasTag(offHandStack.getItem(),new ResourceLocation(MODID, "mufflers"))) {
+        if (hasTag(offHandStack.getItem(), new ResourceLocation(MODID, "mufflers"))) {
             FloorMatClusters.toggleMuffler(worldIn, iPos);
             return true;
         }
@@ -442,8 +413,8 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
             BlockState firstBS = worldIn.getBlockState(firstPos);
             if ((firstBS.getBlock() instanceof AbstractFloorMatBlock)
                     && FloorMatClusters.canAlter(worldIn, firstPos, firstBS, player.getUniqueID())) {
-                FloorMatClusters.linkEffects(worldIn,firstPos,firstBS);
-                if ( FloorMatClusters.linkClusters(worldIn, iPos, stateIn, firstPos, firstBS) ) {
+                FloorMatClusters.linkEffects(worldIn, firstPos, firstBS);
+                if (FloorMatClusters.linkClusters(worldIn, iPos, stateIn, firstPos, firstBS)) {
                     if (!player.abilities.isCreativeMode) {
                         if (itemInHand.getMaxStackSize() > 1) {
                             itemInHand.shrink(1);
@@ -472,6 +443,14 @@ public abstract class AbstractFloorMatBlock extends AbstractPressurePlateBlock i
         player.getCooldownTracker().setCooldown(itemInHand.getItem(), 20);
         player.addStat(Stats.ITEM_USED.get(itemInHand.getItem()));
         return ActionResultType.SUCCESS;
+    }
+
+    public boolean isGilded() {
+        return false;
+    }
+
+    public ITextComponent getToolTipText() {
+        return new TranslationTextComponent("tooltip.ctrl_shift.floor_mat");
     }
 
 }
